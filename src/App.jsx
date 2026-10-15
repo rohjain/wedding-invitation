@@ -174,8 +174,8 @@ function HeroSection({ isOpen, curtainsOpened }) {
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
-          <h1 className="name-script">Zayn</h1>
-          <p className="person-details">Son of Mr. &amp; Mrs. Malik</p>
+          <h1 className="name-script">Rohit</h1>
+          <p className="person-details">Son of Sunil Jain &amp; Usha Jain</p>
           <p className="person-details">B.E., M.S.</p>
           <p className="person-details">Data Scientist</p>
         </motion.div>
@@ -195,8 +195,8 @@ function HeroSection({ isOpen, curtainsOpened }) {
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
-          <h2 className="name-script">Nora</h2>
-          <p className="person-details">Daughter of Mr. &amp; Mrs. Nasser</p>
+          <h2 className="name-script">Priya</h2>
+          <p className="person-details">Daughter of Dinesh Jain &amp; Rani Jain</p>
           <p className="person-details">MBBS, M.D</p>
           <p className="person-details">Pediatrician</p>
         </motion.div>
@@ -230,7 +230,7 @@ function WelcomeSection() {
         <SectionDivider />
         <p className="welcome-text">
           We are honored to welcome you to the Wedding
-          ceremony of Zayn &amp; Nora. As they begin their
+          ceremony of Rohit &amp; Priya. As they begin their
           journey together in faith and love,
           <br />
           we thank you for being part of this blessed
@@ -356,8 +356,8 @@ function ScratchSection() {
         <div className={`scratch-card ${isRevealed ? 'revealed' : ''}`}>
           <div className="scratch-hidden-content">
             <p className="scratch-date-label">Save the Date</p>
-            <p className="scratch-date">January 31</p>
-            <p className="scratch-year">2027</p>
+            <p className="scratch-date">November 21</p>
+            <p className="scratch-year">2026</p>
           </div>
           {!isRevealed && (
             <canvas
@@ -454,7 +454,7 @@ function CountdownSection() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const targetDate = new Date('2027-01-31T10:00:00');
+    const targetDate = new Date('2026-11-21T10:00:00');
     const update = () => {
       const now = new Date();
       const diff = targetDate.getTime() - now.getTime();
@@ -518,14 +518,14 @@ function CountdownSection() {
 function TimelineSection() {
   const events = [
     {
-      date: 'SUNDAY, JAN 31, 2027',
+      date: 'SATURDAY, NOV 21, 2026',
       items: [
         { time: '10:00 AM', title: 'Guest Arrival', desc: 'We welcome you.. ♥' },
         { time: '10:30 AM', title: 'Wedding Ceremony', desc: 'Your presence means a lot!' },
       ],
     },
     {
-      date: 'TUESDAY, FEB 2, 2027',
+      date: 'SUNDAY, NOV 22, 2026',
       items: [
         { time: '7:30 PM', title: 'Reception', desc: '' },
       ],
@@ -664,12 +664,15 @@ function DressCodeSection() {
 function PreWeddingSection() {
   const events = [
     {
-      date: 'THURSDAY, JAN 28, 2027',
+      date: 'THURSDAY, NOV 19, 2026',
       items: [{ time: '8:30 PM', title: 'Mahendi', desc: "At Bride's House" }],
     },
     {
-      date: 'FRIDAY, JAN 29, 2027',
-      items: [{ time: '8:00 PM', title: 'Haldi', desc: "At Groom's House" }],
+      date: 'FRIDAY, NOV 20, 2026',
+      items: [
+        { time: '2:00 PM', title: 'Haldi', desc: "At Groom's House" },
+        { time: '8:00 PM', title: 'Sangeet', desc: "Music, Dance & Dinner" },
+      ],
     },
   ];
 
@@ -801,7 +804,7 @@ function ClosingSection() {
         viewport={{ once: true, margin: '-50px' }}
       >
         <h2 className="closing-text">We can't wait to celebrate with you!</h2>
-        <p className="closing-names">Zayn &amp; Nora</p>
+        <p className="closing-names">Rohit &amp; Priya</p>
         <WavySeparator />
       </motion.div>
     </section>
@@ -814,7 +817,7 @@ function Footer() {
       <div className="footer-floral" />
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
         <motion.div className="footer-names" variants={fadeIn(0.2)}>
-          Zayn &amp; Nora
+          Rohit &amp; Priya
         </motion.div>
         <motion.p className="footer-text" variants={fadeIn(0.4)}>
           Create your own Invitation on <span className="footer-brand">Zareqia</span>
