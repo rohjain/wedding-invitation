@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Frame Inspector</title>
+  <style>
+    body { font-family: sans-serif; background: #222; color: #fff; padding: 20px; }
+    video { max-width: 400px; display: block; margin-bottom: 20px; }
+    .frames { display: flex; flex-wrap: wrap; gap: 10px; }
+    .frame-box { background: #333; padding: 5px; border-radius: 4px; text-align: center; }
+    canvas { max-width: 200px; display: block; }
+  </style>
+</head>
+<body>
+  <h2>Video Frame Inspector</h2>
+  <video id="vid" src="/source-video.mp4" controls crossorigin="anonymous" muted></video>
+  <div id="info">Loading video...</div>
+  <div class="frames" id="frames"></div>
+
+  <script>
+    const vid = document.getElementById('vid');
+    const info = document.getElementById('info');
+    const framesDiv = document.getElementById('frames');
+
+    vid.addEventListener('loadedmetadata', async () => {
+      info.textContent = `Duration: ${vid.duration.toFixed(2)}s, Dimensions: ${vid.videoWidth}x${vid.videoHeight}`;
+      
+      // Granular timestamps for door opening and curtain unfold
+      const timestamps = [
+        1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.4, 3.8, 4.2, 4.6, 5.0, 5.4, 5.8, 6.3, 7.0, 8.0
+      ];
+      
+      for (const t of timestamps) {
+        if (t > vid.duration) break;
+        await seekTo(t);
+        const box = document.createElement('div');
+        box.className = 'frame-box';
+        const label = document.createElement('div');
+        label.textContent = `t = ${t}s`;
+        const canvas = document.createElement('canvas');
+        canvas.width = vid.videoWidth;
+        canvas.height = vid.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(vid, 0, 0);
+        box.appendChild(label);
+        box.appendChild(canvas);
+        framesDiv.appendChild(box);
+      }
+      info.textContent += ' — Done capturing frames!';
+    });
+
+    function seekTo(time) {
+      return new Promise((resolve) => {
+        const onSeeked = () => {
+          vid.removeEventListener('seeked', onSeeked);
+          // Wait a tick for paint
+          setTimeout(resolve, 100);
+        };
+        vid.addEventListener('seeked', onSeeked);
+        vid.currentTime = time;
+      });
+    }
+  </script>
+</body>
+</html>

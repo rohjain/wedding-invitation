@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><title>Extract Frames</title></head>
+<body>
+  <h2>Extracting frames...</h2>
+  <div id="status">Starting...</div>
+  <video id="vid" src="/source-video.mp4" muted crossorigin="anonymous" style="display:none"></video>
+
+  <script>
+    const vid = document.getElementById('vid');
+    const status = document.getElementById('status');
+
+    const targets = [
+      { name: 'video-door-start.jpg', time: 0.5 },
+      { name: 'video-door-parting-1.jpg', time: 2.6 },
+      { name: 'video-door-parting-2.jpg', time: 3.2 },
+      { name: 'video-curtain-closed.jpg', time: 4.6 },
+      { name: 'video-curtain-opening-1.jpg', time: 5.1 },
+      { name: 'video-curtain-opening-2.jpg', time: 5.7 },
+      { name: 'video-curtain-opening-3.jpg', time: 6.3 },
+      { name: 'video-curtain-opened.jpg', time: 7.2 }
+    ];
+
+    vid.addEventListener('loadedmetadata', async () => {
+      status.textContent = 'Metadata loaded, extracting...';
+      const canvas = document.createElement('canvas');
+      canvas.width = vid.videoWidth;
+      canvas.height = vid.videoHeight;
+      const ctx = canvas.getContext('2d');
+
+      for (const t of targets) {
+        status.textContent = `Seeking to ${t.time}s for ${t.name}...`;
+        await seekTo(t.time);
+        ctx.drawImage(vid, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        
+        status.textContent = `Saving ${t.name}...`;
+        await fetch('/api/save-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: t.name, dataUrl })
+        });
+      }
+
+      status.textContent = 'ALL_FRAMES_SAVED_SUCCESSFULLY';
+    });
+
+    function seekTo(time) {
+      return new Promise((resolve) => {
+        const onSeeked = () => {
+          vid.removeEventListener('seeked', onSeeked);
+          setTimeout(resolve, 150);
+        };
+        vid.addEventListener('seeked', onSeeked);
+        vid.currentTime = time;
+      });
+    }
+  </script>
+</body>
+</html>

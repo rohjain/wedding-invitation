@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>Clean Curtain Image</title></head>
+<body>
+  <h2>Cleaning Images...</h2>
+  <div id="status">Starting...</div>
+  <canvas id="c"></canvas>
+
+  <script>
+    const status = document.getElementById('status');
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+
+    async function cleanCurtain() {
+      const img = new Image();
+      img.src = '/video-curtain-closed.jpg';
+      await new Promise(r => img.onload = r);
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      // The dot is around x=574, y=660. Radius ~25.
+      // In video-curtain-closed, at x=574, y=660, there are the two tassels meeting.
+      // Let's copy a small vertical slice from y=600 to y=645 to patch over the grey circle:
+      ctx.drawImage(canvas, 550, 580, 50, 45, 550, 640, 50, 45);
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+      await fetch('/api/save-frame', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: 'curtain-closed-clean.jpg', dataUrl })
+      });
+
+      status.textContent = 'CLEAN_CURTAIN_SAVED';
+    }
+
+    cleanCurtain();
+  </script>
+</body>
+</html>
