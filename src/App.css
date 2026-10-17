@@ -488,7 +488,12 @@
   height: 30px;
 }
 
-/* ===== CONTINUOUS FLORAL SIDE VINES ===== */
+/* ===== CONTINUOUS FLORAL SIDE VINES & CORNERS ===== */
+.invitation-main-flow {
+  position: relative;
+  width: 100%;
+}
+
 .invitation-vine-border {
   position: absolute;
   top: 0;
@@ -513,9 +518,24 @@
   transform: scaleX(-1);
 }
 
-.floral-border,
 .floral-corner {
-  display: none !important;
+  position: absolute;
+  top: 0;
+  width: 130px;
+  height: 130px;
+  z-index: 12;
+  pointer-events: none;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(59, 74, 63, 0.12));
+}
+
+.floral-corner.corner-left {
+  left: 0;
+}
+
+.floral-corner.corner-right {
+  right: 0;
+  transform: scaleX(-1);
 }
 
 /* ===== WELCOME SECTION (LAGNA PATRIKA) ===== */
@@ -772,9 +792,7 @@
   position: relative;
   width: 100%;
   background-color: #FAF5EB;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.45), rgba(247, 240, 226, 0.45)),
-    var(--patrika-texture, url('/patrika-texture.jpg'));
+  background-image: var(--patrika-texture, url('/patrika-texture-new.jpg'));
   background-repeat: repeat;
   background-size: 340px 340px;
 }
@@ -833,7 +851,7 @@
   background-color: #FAF6EE;
   background-image: 
     linear-gradient(150deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.90) 55%, rgba(237, 228, 212, 0.92) 100%),
-    var(--patrika-texture, url('/patrika-texture.jpg'));
+    var(--patrika-texture, url('/patrika-texture-new.jpg'));
   background-size: cover;
   border: 1.5px solid rgba(197, 160, 89, 0.55);
   box-shadow:
@@ -1741,6 +1759,16 @@
 
   .patrika-family-names {
     font-size: 0.76rem;
+  }
+
+  .floral-corner {
+    width: 100px;
+    height: 100px;
+  }
+
+  .invitation-vine-border {
+    width: 28px;
+    background-size: 28px auto;
   }
 }
 

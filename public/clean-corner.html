@@ -26,145 +26,59 @@
         const w = canvas.width;
         const h = canvas.height;
 
-        // BFS flood fill starting ONLY from the outer edges and bottom-right
-        const visited = new Uint8Array(w * h);
-        const queue = [];
+        const daisyCenters = [
+          [330, 125], [550, 240], [300, 480], [380, 520], [220, 590], [180, 310]
+        ];
 
-        function pushPixel(x, y) {
-          if (x >= 0 && x < w && y >= 0 && y < h) {
-            const idx = y * w + x;
-            if (!visited[idx]) {
-              visited[idx] = 1;
-              queue.push(idx);
-            }
-          }
-        }
-
-        // Push outer edges
-        for (let x = 0; x < w; x++) {
-          pushPixel(x, 0);
-          pushPixel(x, h - 1);
-        }
         for (let y = 0; y < h; y++) {
-          pushPixel(0, y);
-          pushPixel(w - 1, y);
-        }
-        // Push bottom-right
-        for (let y = 800; y < h; y += 10) {
-          for (let x = 800; x < w; x += 10) {
-            pushPixel(x, y);
-          }
-        }
+          for (let x = 0; x < w; x++) {
+            const p = (y * w + x) * 4;
+            const r = d[p], g = d[p + 1], b = d[p + 2];
 
-        // What separates paper from flowers?
-        // In the original floral-corner.jpg:
-        // The background paper has an ivory/cream tint:
-        // r ~ 220-245, g ~ 215-238, b ~ 195-220. r > g > b.
-        // And outside the paper sheet, there is the white table (x < 50 || y < 50 || x > 950 || y > 950).
-        // The flowers have shadows underneath them cast onto the paper!
-        // Shadow on paper is darker cream/brown: r: 160-205, g: 150-195, b: 130-175.
-        // Leaves are GREEN: g > r + 5 || (g > 60 && g > b + 10).
-        // Roses are PINK/PEACH: r > g + 14 || (r > 150 && g < 135).
-        // Centers are YELLOW: r > 160 && g > 120 && b < 100.
-        // White roses:
-        // Notice white roses have cream/pinkish center and shaded petals:
-        // Inside the flower cluster:
-        // If we compute an exclusion mask:
-        // The flower cluster is contained within a polygon:
-        // Top edge of flowers: y >= 55
-        // Left edge of flowers: x >= 55
-        // Bottom-right inner boundary of the flowers:
-        // Let's trace the boundary between flowers and empty paper!
-        
-        // Let's find the first flower pixel from bottom-right towards top-left:
-        // For each ray or scanline from bottom-right (1000, 1000) towards (0, 0):
-        // Anything on the paper side is 100% paper!
-        
-        // Let's test if a pixel is clearly paper:
-        function isPaperColor(r, g, b, x, y) {
-          const maxC = Math.max(r, g, b);
-          const minC = Math.min(r, g, b);
-          const chroma = maxC - minC;
-
-          // Pure white table outside sheet
-          if (minC > 240 && chroma < 14) return true;
-          // Deckled edge boundary
-          if ((x < 55 || y < 55 || x > 950 || y > 950) && chroma < 25) return true;
-          // Paper surface
-          if (r > 195 && g > 185 && b > 160 && r >= g - 4 && g >= b - 8 && chroma < 38) {
-            // Check it's not a green leaf or pink rose
-            if (!(g > r + 6) && !(r > g + 20)) {
-              return true;
-            }
-          }
-          // Paper specks/fibers
-          if (r > 165 && g > 155 && b > 135 && r >= g - 4 && g >= b - 8 && chroma < 32) {
-            return true;
-          }
-          return false;
-        }
-
-        // To prevent breach into white roses:
-        // White roses are strictly inside x in [80, 560] and y in [80, 520].
-        // The white roses DO NOT touch the paper directly without a shadow or leaf boundary,
-        // UNLESS the paper threshold was too broad.
-        // But we know white rose petals have r > 230, g > 230, b > 230, chroma < 12.
-        // In isPaperColor, if x < 550 && y < 550, and chroma < 15 and minC > 220:
-        // If it's inside x in [100, 530] and y in [100, 500], it is a WHITE FLOWER, NOT paper!
-        
-        let head = 0;
-        while (head < queue.length) {
-          const idx = queue[head++];
-          const x = idx % w;
-          const y = Math.floor(idx / w);
-          const p = idx * 4;
-          const r = d[p], g = d[p + 1], b = d[p + 2];
-
-          // Check if white rose petal
-          const inWhiteFlowerZone = (x >= 90 && x <= 540 && y >= 90 && y <= 500);
-          const maxC = Math.max(r, g, b);
-          const minC = Math.min(r, g, b);
-          const chroma = maxC - minC;
-
-          // If in white flower zone and looks like a bright petal, DO NOT treat as background!
-          let isPetal = false;
-          if (inWhiteFlowerZone) {
-            // White rose / daisy petals:
-            if (minC > 210 && chroma < 25) {
-              // But not outer table
-              if (x > 70 && y > 70) {
-                isPetal = true;
+            // 1. Green leaves / stems
+            const isGreen = (g > r + 5 && g > b + 3) || (g > 55 && g > r && g - b > 3) || (g > 70 && r < 140 && b < 130);
+            // 2. Pink / peach roses & buds
+            const isPink = (r > g + 13 && r > b + 6) || (r > 150 && g < 135);
+            // 3. Yellow flower centers
+            const isYellow = (r > 165 && g > 120 && b < 100);
+            // 4. Dark stems / deep shadows under flowers
+            const isDark = (r < 112 && g < 112 && b < 108);
+            // 5. White roses
+            const isWhiteRose1 = (x >= 100 && x <= 295 && y >= 320 && y <= 490);
+            const isWhiteRose2 = (x >= 355 && x <= 505 && y >= 115 && y <= 265);
+            // 6. Daisy petals
+            let isDaisy = false;
+            for (const [dx, dy] of daisyCenters) {
+              if (Math.hypot(x - dx, y - dy) < 38) {
+                isDaisy = true;
+                break;
               }
             }
-          }
 
-          const isGreen = (g > r + 6 && g > b + 4) || (g > 65 && g > r && g - b > 4);
-          const isPink = (r > g + 16 && r > b + 8) || (r > 150 && g < 130);
-          const isYellow = (r > 175 && g > 130 && b < 100);
+            const isForeground = isGreen || isPink || isYellow || isDark || isWhiteRose1 || isWhiteRose2 || isDaisy;
 
-          if (!isPetal && !isGreen && !isPink && !isYellow && isPaperColor(r, g, b, x, y)) {
-            d[p + 3] = 0; // transparent
-            pushPixel(x + 1, y);
-            pushPixel(x - 1, y);
-            pushPixel(x, y + 1);
-            pushPixel(x, y - 1);
+            if (!isForeground) {
+              d[p + 3] = 0; // transparent!
+            }
           }
         }
 
-        // Clean up outer perimeter
+        // Clean up outer edges and blank zones
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
             const p = (y * w + x) * 4;
             const r = d[p], g = d[p+1], b = d[p+2];
-            const isGreen = (g > r + 6 && g > b + 4);
-            const isPink = (r > g + 16 && r > b + 8);
-            if ((x < 55 || y < 55 || x > 950 || y > 950) && !isGreen && !isPink) {
+            const isGreen = (g > r + 5 && g > b + 3);
+            const isPink = (r > g + 13 && r > b + 6);
+            if ((x > 890 && y > 300) || (y > 930 && x > 260) || (x + y > 1180)) {
+              d[p + 3] = 0;
+            } else if ((x < 55 || y < 55 || x > 950 || y > 950) && !isGreen && !isPink) {
               d[p + 3] = 0;
             }
           }
         }
 
-        // Connected component speck removal (< 500 pixels)
+        // Connected component speck removal (< 1200 pixels)
         const labelVisited = new Uint8Array(w * h);
         for (let y = 0; y < h; y++) {
           for (let x = 0; x < w; x++) {
@@ -193,7 +107,7 @@
                 }
               }
 
-              if (compQueue.length < 500) {
+              if (compQueue.length < 1200) {
                 for (const cIdx of compQueue) {
                   d[cIdx * 4 + 3] = 0;
                 }
@@ -202,7 +116,7 @@
           }
         }
 
-        // Feather edges (2 passes)
+        // Feather edges
         for (let pass = 0; pass < 2; pass++) {
           for (let y = 1; y < h - 1; y++) {
             for (let x = 1; x < w - 1; x++) {

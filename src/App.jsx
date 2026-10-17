@@ -843,13 +843,37 @@ function App() {
         className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
         style={{ '--gold-paper-bg': `url(${asset('/gold-paper-bg.jpg')})` }}
       >
-        <div className="invitation-vine-border vine-left" aria-hidden="true" style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }} />
-        <div className="invitation-vine-border vine-right" aria-hidden="true" style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }} />
         <HeroSection isOpen={isOpen} curtainsOpened={curtainsOpened} />
         <div
           className="invitation-seamless-body"
-          style={{ '--patrika-texture': `url(${asset('/patrika-texture.jpg')})` }}
+          style={{ '--patrika-texture': `url(${asset('/patrika-texture-new.jpg')})` }}
         >
+          {/* Floral Corners - starting from Welcome section */}
+          <img
+            src={asset('/floral-corner-clean.png')}
+            alt=""
+            className="floral-corner corner-left"
+            aria-hidden="true"
+          />
+          <img
+            src={asset('/floral-corner-clean.png')}
+            alt=""
+            className="floral-corner corner-right"
+            aria-hidden="true"
+          />
+
+          {/* Continuous Floral Side Vines - starting from Welcome section */}
+          <div
+            className="invitation-vine-border vine-left"
+            aria-hidden="true"
+            style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }}
+          />
+          <div
+            className="invitation-vine-border vine-right"
+            aria-hidden="true"
+            style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }}
+          />
+
           <WelcomeSection />
           <ScratchSection isMuted={isMuted} />
           <GallerySection />
