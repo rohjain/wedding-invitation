@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Volume2, VolumeX, Globe, ChevronDown, Clock, MapPin, Calendar, Car, Building, Gift, Shirt, PartyPopper } from 'lucide-react';
+import { Volume2, VolumeX, Globe, ChevronDown, Clock, MapPin, Calendar, Shirt, PartyPopper } from 'lucide-react';
+import ScratchSection from './components/ScratchSection';
 import './App.css';
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -215,175 +216,212 @@ function HeroSection({ isOpen, curtainsOpened }) {
   );
 }
 
-/* ===== WELCOME MESSAGE ===== */
+/* ===== AUSPICIOUS MANGAL KALASH SVG ===== */
+function MangalKalash({ size = 52, className = '' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-label="Auspicious Mangal Kalash"
+    >
+      <defs>
+        <linearGradient id="patrikaGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFF4C2" />
+          <stop offset="25%" stopColor="#E2BD63" />
+          <stop offset="50%" stopColor="#AA7C11" />
+          <stop offset="75%" stopColor="#F5D77F" />
+          <stop offset="100%" stopColor="#8F6416" />
+        </linearGradient>
+        <linearGradient id="patrikaGoldDark" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D4AF37" />
+          <stop offset="100%" stopColor="#7A5615" />
+        </linearGradient>
+        <radialGradient id="kalashGlowGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.32" />
+          <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Gentle radiant aura */}
+      <circle cx="50" cy="50" r="46" fill="url(#kalashGlowGrad)" />
+
+      {/* Center Mango Leaf (behind) */}
+      <path
+        d="M50 36 C47 22, 49 12, 50 5 C51 12, 53 22, 50 36 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#7A5615"
+        strokeWidth="0.8"
+      />
+      {/* Side Mango Leaves */}
+      <path
+        d="M45 40 C30 32, 20 22, 16 14 C26 17, 36 27, 45 40 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#7A5615"
+        strokeWidth="0.8"
+      />
+      <path
+        d="M55 40 C70 32, 80 22, 84 14 C74 17, 64 27, 55 40 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#7A5615"
+        strokeWidth="0.8"
+      />
+      <path
+        d="M42 45 C22 42, 12 34, 8 26 C18 29, 30 38, 42 45 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#7A5615"
+        strokeWidth="0.8"
+      />
+      <path
+        d="M58 45 C78 42, 88 34, 92 26 C82 29, 70 38, 58 45 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#7A5615"
+        strokeWidth="0.8"
+      />
+
+      {/* Sacred Coconut (Nariyal) */}
+      <path
+        d="M40 44 C36 30, 42 17, 50 15 C58 17, 64 30, 60 44 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#6E4A0C"
+        strokeWidth="1"
+      />
+      {/* Sacred Red Thread / Mauli Bindings */}
+      <path d="M42 30 Q50 34 58 30" stroke="#8C1D13" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M43 24 Q50 28 57 24" stroke="#8C1D13" strokeWidth="1.4" strokeLinecap="round" />
+
+      {/* Neck & Rim of Kalash */}
+      <ellipse cx="50" cy="45" rx="18" ry="4.5" fill="url(#patrikaGoldGrad)" stroke="#6E4A0C" strokeWidth="1" />
+      <path d="M34 45 L31 52 L69 52 L66 45 Z" fill="url(#patrikaGoldDark)" stroke="#6E4A0C" strokeWidth="0.8" />
+
+      {/* Pot Belly */}
+      <path
+        d="M31 52 C21 60, 23 74, 36 82 L64 82 C77 74, 79 60, 69 52 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#6E4A0C"
+        strokeWidth="1.2"
+      />
+
+      {/* Decorative Embossed Bands on Pot */}
+      <path d="M28 62 Q50 67 72 62" stroke="#6E4A0C" strokeWidth="0.9" fill="none" />
+      <path d="M29 66 Q50 71 71 66" stroke="#6E4A0C" strokeWidth="0.9" fill="none" />
+
+      {/* Sacred Swastika / Auspicious Seal in Red Kumkum */}
+      <g stroke="#8C1D13" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M50 58 L50 74" />
+        <path d="M42 66 L58 66" />
+        <path d="M50 58 L56 58" />
+        <path d="M58 66 L58 72" />
+        <path d="M50 74 L44 74" />
+        <path d="M42 66 L42 60" />
+      </g>
+      <circle cx="45" cy="62" r="1" fill="#8C1D13" />
+      <circle cx="55" cy="62" r="1" fill="#8C1D13" />
+      <circle cx="45" cy="70" r="1" fill="#8C1D13" />
+      <circle cx="55" cy="70" r="1" fill="#8C1D13" />
+
+      {/* Pedestal Base */}
+      <path
+        d="M36 82 Q50 86 64 82 L67 87 Q50 91 33 87 Z"
+        fill="url(#patrikaGoldGrad)"
+        stroke="#6E4A0C"
+        strokeWidth="1"
+      />
+    </svg>
+  );
+}
+
+/* ===== PATRIKA ORNATE DIVIDER ===== */
+function PatrikaDivider({ className = '' }) {
+  return (
+    <div className={`patrika-divider ${className}`} aria-hidden="true">
+      <svg width="220" height="20" viewBox="0 0 220 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pGoldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#C5A059" stopOpacity="0.05" />
+            <stop offset="35%" stopColor="#D4AF37" stopOpacity="0.85" />
+            <stop offset="50%" stopColor="#FFF2B2" stopOpacity="1" />
+            <stop offset="65%" stopColor="#D4AF37" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#C5A059" stopOpacity="0.05" />
+          </linearGradient>
+        </defs>
+        <path d="M12 10 L82 10" stroke="url(#pGoldLine)" strokeWidth="1.2" strokeLinecap="round" />
+        <path d="M138 10 L208 10" stroke="url(#pGoldLine)" strokeWidth="1.2" strokeLinecap="round" />
+        <circle cx="12" cy="10" r="2" fill="#D4AF37" />
+        <circle cx="208" cy="10" r="2" fill="#D4AF37" />
+        {/* Central Auspicious Motif */}
+        <g transform="translate(110, 10)">
+          <path d="M0 -7 C3 -2, 5 0, 8 0 C5 3, 2 5, 0 8 C-2 5, -5 3, -8 0 C-5 0, -3 -2, 0 -7 Z" fill="url(#patrikaGoldGrad)" />
+          <circle cx="0" cy="0" r="2" fill="#8C1D13" />
+          <path d="M-8 0 C-14 -4, -18 0, -22 -2" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round" fill="none" />
+          <path d="M8 0 C14 -4, 18 0, 22 -2" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round" fill="none" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+/* ===== WELCOME MESSAGE (LAGNA PATRIKA STYLE) ===== */
 function WelcomeSection() {
   return (
     <section className="welcome-section" id="welcome">
+      {/* Ambient Patrika Watermark & Aura */}
+      <div className="patrika-watermark-disc" aria-hidden="true" />
 
       <motion.div
-        className="welcome-content"
+        className="patrika-card"
         variants={fadeInUp(0.2)}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
       >
-        <SectionDivider />
-        <p className="welcome-text">
-          We are honored to welcome you to the Wedding
-          ceremony of Rohit &amp; Priya. As they begin their
-          journey together in faith and love,
-          <br />
-          we thank you for being part of this blessed
-          occasion <HeartIcon size={14} className="inline-heart" />
-        </p>
-        <SectionDivider />
-      </motion.div>
-    </section>
-  );
-}
+        {/* Card Gold Trim Inner Container */}
+        <div className="patrika-card-inner">
+          {/* Card Shimmer Sweep */}
+          <div className="patrika-card-shimmer" aria-hidden="true" />
 
-/* ===== SCRATCH TO REVEAL ===== */
-function ScratchSection() {
-  const canvasRef = useRef(null);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = 260;
-    canvas.height = 280;
-
-    // Draw the scratch overlay (green sparkle heart shape)
-    ctx.fillStyle = '#7a8f7e';
-    ctx.beginPath();
-    const x = canvas.width / 2;
-    const y = canvas.height / 2 - 10;
-    const size = 105;
-
-    // Heart path function
-    function createHeartPath() {
-      ctx.beginPath();
-      ctx.moveTo(x, y + size * 0.75);
-      ctx.bezierCurveTo(x - size * 1.35, y - size * 0.15, x - size * 0.65, y - size * 0.95, x, y - size * 0.4);
-      ctx.bezierCurveTo(x + size * 0.65, y - size * 0.95, x + size * 1.35, y - size * 0.15, x, y + size * 0.75);
-      ctx.closePath();
-    }
-
-    createHeartPath();
-    const grad = ctx.createRadialGradient(x, y - 20, 10, x, y, size);
-    grad.addColorStop(0, '#8ea693');
-    grad.addColorStop(0.5, '#728b77');
-    grad.addColorStop(1, '#576f5c');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Glitter/speckles
-    ctx.save();
-    ctx.clip();
-    for (let i = 0; i < 220; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * size * 0.95;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius * 0.8;
-      const dotSize = Math.random() * 2.2 + 0.4;
-      const alpha = Math.random() * 0.6 + 0.2;
-      ctx.fillStyle = Math.random() > 0.4 ? `rgba(255, 255, 255, ${alpha})` : `rgba(235, 215, 160, ${alpha})`;
-      ctx.beginPath();
-      ctx.arc(px, py, dotSize, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    // Subtle golden stroke
-    createHeartPath();
-    ctx.strokeStyle = 'rgba(197, 160, 89, 0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-  }, []);
-
-  const scratch = useCallback((e) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    
-    let clientX, clientY;
-    if (e.touches) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    
-    const x = (clientX - rect.left) * scaleX;
-    const y = (clientY - rect.top) * scaleY;
-    
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(x, y, 22, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Check how much is scratched
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let transparent = 0;
-    for (let i = 3; i < imageData.data.length; i += 4) {
-      if (imageData.data[i] === 0) transparent++;
-    }
-    const percentage = transparent / (imageData.data.length / 4);
-    if (percentage > 0.35) {
-      setIsRevealed(true);
-    }
-  }, [isDrawing]);
-
-  return (
-    <section className="scratch-section" id="scratch">
-      <motion.div
-        className="scratch-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <h2 className="section-title-script">Scratch to Reveal</h2>
-        <SectionDivider />
-
-        <div className={`scratch-card ${isRevealed ? 'revealed' : ''}`}>
-          <div className="scratch-hidden-content">
-            <p className="scratch-date-label">Save the Date</p>
-            <p className="scratch-date">November 21</p>
-            <p className="scratch-year">2026</p>
+          {/* Top Auspicious Invocation Header */}
+          <div className="patrika-header">
+            <MangalKalash size={38} className="patrika-kalash-icon" />
+            <p className="patrika-shloka-text">॥ श्री गणेशाय नमः ॥</p>
+            <div className="patrika-vivah-badge">
+              <span className="patrika-badge-dot">•</span>
+              <span className="patrika-badge-text">शुभ विवाह</span>
+              <span className="patrika-badge-dot">•</span>
+            </div>
           </div>
-          {!isRevealed && (
-            <canvas
-              ref={canvasRef}
-              className="scratch-canvas"
-              onMouseDown={() => setIsDrawing(true)}
-              onMouseUp={() => setIsDrawing(false)}
-              onMouseLeave={() => setIsDrawing(false)}
-              onMouseMove={scratch}
-              onTouchStart={() => setIsDrawing(true)}
-              onTouchEnd={() => setIsDrawing(false)}
-              onTouchMove={scratch}
-            />
-          )}
+
+          <PatrikaDivider />
+
+          {/* Invitation Content */}
+          <div className="patrika-content">
+            <h3 className="patrika-title">WEDDING INVITATION</h3>
+            <p className="welcome-text-intro">
+              We are honored to welcome you to the<br />Wedding ceremony of
+            </p>
+            <div className="patrika-couple-names">Rohit &amp; Priya</div>
+            <p className="welcome-text-blessing">
+              As they begin their sacred journey together in faith and love,<br />
+              we thank you from the bottom of our hearts for being part of this blessed occasion{' '}
+              <HeartIcon size={14} className="inline-heart" />
+            </p>
+          </div>
+
+          <PatrikaDivider />
+
+          {/* Traditional Auspicious Blessing Sign-off */}
+          <div className="patrika-footer">
+            <p className="patrika-blessing-header">॥ स्नेह निमंत्रण ॥</p>
+          </div>
         </div>
-
-        <button className="save-date-btn">
-          <Calendar size={16} />
-          <span>SAVE THE DATE</span>
-        </button>
       </motion.div>
-
-      <WavySeparator />
     </section>
   );
 }
+
 
 /* ===== PHOTO GALLERY ===== */
 function GallerySection() {
@@ -716,80 +754,6 @@ function PreWeddingSection() {
   );
 }
 
-/* ===== TRANSPORTATION ===== */
-function TransportationSection() {
-  return (
-    <section className="info-section" id="transportation">
-
-      <motion.div
-        className="info-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <Car size={24} className="section-icon" />
-        <h2 className="section-title-script">Transportation</h2>
-        <SectionDivider />
-        <p className="info-text">
-          Shuttle service will be available from the city center to the venue. Pickup point: Central Station at 3:30 PM.
-        </p>
-      </motion.div>
-
-      <WavySeparator />
-    </section>
-  );
-}
-
-/* ===== ACCOMMODATION ===== */
-function AccommodationSection() {
-  return (
-    <section className="info-section" id="accommodation">
-
-      <motion.div
-        className="info-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <Building size={24} className="section-icon" />
-        <h2 className="section-title-script">Accommodation</h2>
-        <SectionDivider />
-        <p className="info-text">
-          Special rates at The Grand Palace Hotel (5 min from venue). Use code WEDDING2026 when booking.
-        </p>
-      </motion.div>
-
-      <WavySeparator />
-    </section>
-  );
-}
-
-/* ===== GIFTS ===== */
-function GiftsSection() {
-  return (
-    <section className="info-section" id="gifts">
-
-      <motion.div
-        className="info-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <Gift size={24} className="section-icon" />
-        <h2 className="section-title-script">Gifts</h2>
-        <SectionDivider />
-        <p className="info-text">
-          Your love, blessings, and presence are the greatest gifts we could ever ask for.
-        </p>
-      </motion.div>
-
-      <WavySeparator />
-    </section>
-  );
-}
 
 /* ===== CLOSING / FOOTER ===== */
 function ClosingSection() {
@@ -804,6 +768,13 @@ function ClosingSection() {
         viewport={{ once: true, margin: '-50px' }}
       >
         <h2 className="closing-text">We can't wait to celebrate with you!</h2>
+        <div className="closing-image-wrapper">
+          <img
+            src={asset('/celebrate-couple.jpg')}
+            alt="Rohit & Priya"
+            className="closing-image"
+          />
+        </div>
         <p className="closing-names">Rohit &amp; Priya</p>
         <WavySeparator />
       </motion.div>
@@ -816,10 +787,7 @@ function Footer() {
     <footer className="footer-section">
       <div className="footer-floral" />
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-        <motion.div className="footer-names" variants={fadeIn(0.2)}>
-          Rohit &amp; Priya
-        </motion.div>
-        <motion.p className="footer-text" variants={fadeIn(0.4)}>
+        <motion.p className="footer-text" variants={fadeIn(0.2)}>
           Create your own Invitation on <span className="footer-brand">Zareqia</span>
         </motion.p>
       </motion.div>
@@ -871,23 +839,28 @@ function App() {
         </div>
       )}
 
-      <div className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}>
+      <div
+        className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
+        style={{ '--gold-paper-bg': `url(${asset('/gold-paper-bg.jpg')})` }}
+      >
         <div className="invitation-vine-border vine-left" aria-hidden="true" style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }} />
         <div className="invitation-vine-border vine-right" aria-hidden="true" style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }} />
         <HeroSection isOpen={isOpen} curtainsOpened={curtainsOpened} />
-        <WelcomeSection />
-        <ScratchSection />
-        <GallerySection />
-        <CountdownSection />
-        <TimelineSection />
-        <VenueSection />
-        <DressCodeSection />
-        <PreWeddingSection />
-        <TransportationSection />
-        <AccommodationSection />
-        <GiftsSection />
-        <ClosingSection />
-        <Footer />
+        <div
+          className="invitation-seamless-body"
+          style={{ '--patrika-texture': `url(${asset('/patrika-texture.jpg')})` }}
+        >
+          <WelcomeSection />
+          <ScratchSection isMuted={isMuted} />
+          <GallerySection />
+          <CountdownSection />
+          <TimelineSection />
+          <VenueSection />
+          <DressCodeSection />
+          <PreWeddingSection />
+          <ClosingSection />
+          <Footer />
+        </div>
       </div>
 
       {/* Floating Controls */}

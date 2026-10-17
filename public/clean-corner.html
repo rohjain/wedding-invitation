@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head><title>Clean Corner</title></head>
+<body>
+  <h2>Cleaning Floral Corner...</h2>
+  <div id="status">Starting...</div>
+  <canvas id="c"></canvas>
+
+  <script>
+    const status = document.getElementById('status');
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+
+    async function process() {
+      try {
+        const img = new Image();
+        img.src = '/floral-corner.jpg';
+        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = imgData.data;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        // BFS flood fill starting ONLY from the outer edges and bottom-right
+        const visited = new Uint8Array(w * h);
+        const queue = [];
+
+        function pushPixel(x, y) {
+          if (x >= 0 && x < w && y >= 0 && y < h) {
+            const idx = y * w + x;
+            if (!visited[idx]) {
+              visited[idx] = 1;
+              queue.push(idx);
+            }
+          }
+        }
+
+        // Push outer edges
+        for (let x = 0; x < w; x++) {
+          pushPixel(x, 0);
+          pushPixel(x, h - 1);
+        }
+        for (let y = 0; y < h; y++) {
+          pushPixel(0, y);
+          pushPixel(w - 1, y);
+        }
+        // Push bottom-right
+        for (let y = 800; y < h; y += 10) {
+          for (let x = 800; x < w; x += 10) {
+            pushPixel(x, y);
+          }
+        }
+
+        // What separates paper from flowers?
+        // In the original floral-corner.jpg:
+        // The background paper has an ivory/cream tint:
+        // r ~ 220-245, g ~ 215-238, b ~ 195-220. r > g > b.
+        // And outside the paper sheet, there is the white table (x < 50 || y < 50 || x > 950 || y > 950).
+        // The flowers have shadows underneath them cast onto the paper!
+        // Shadow on paper is darker cream/brown: r: 160-205, g: 150-195, b: 130-175.
+        // Leaves are GREEN: g > r + 5 || (g > 60 && g > b + 10).
+        // Roses are PINK/PEACH: r > g + 14 || (r > 150 && g < 135).
+        // Centers are YELLOW: r > 160 && g > 120 && b < 100.
+        // White roses:
+        // Notice white roses have cream/pinkish center and shaded petals:
+        // Inside the flower cluster:
+        // If we compute an exclusion mask:
+        // The flower cluster is contained within a polygon:
+        // Top edge of flowers: y >= 55
+        // Left edge of flowers: x >= 55
+        // Bottom-right inner boundary of the flowers:
+        // Let's trace the boundary between flowers and empty paper!
+        
+        // Let's find the first flower pixel from bottom-right towards top-left:
+        // For each ray or scanline from bottom-right (1000, 1000) towards (0, 0):
+        // Anything on the paper side is 100% paper!
+        
+        // Let's test if a pixel is clearly paper:
+        function isPaperColor(r, g, b, x, y) {
+          const maxC = Math.max(r, g, b);
+          const minC = Math.min(r, g, b);
+          const chroma = maxC - minC;
+
+          // Pure white table outside sheet
+          if (minC > 240 && chroma < 14) return true;
+          // Deckled edge boundary
+          if ((x < 55 || y < 55 || x > 950 || y > 950) && chroma < 25) return true;
+          // Paper surface
+          if (r > 195 && g > 185 && b > 160 && r >= g - 4 && g >= b - 8 && chroma < 38) {
+            // Check it's not a green leaf or pink rose
+            if (!(g > r + 6) && !(r > g + 20)) {
+              return true;
+            }
+          }
+          // Paper specks/fibers
+          if (r > 165 && g > 155 && b > 135 && r >= g - 4 && g >= b - 8 && chroma < 32) {
+            return true;
+          }
+          return false;
+        }
+
+        // To prevent breach into white roses:
+        // White roses are strictly inside x in [80, 560] and y in [80, 520].
+        // The white roses DO NOT touch the paper directly without a shadow or leaf boundary,
+        // UNLESS the paper threshold was too broad.
+        // But we know white rose petals have r > 230, g > 230, b > 230, chroma < 12.
+        // In isPaperColor, if x < 550 && y < 550, and chroma < 15 and minC > 220:
+        // If it's inside x in [100, 530] and y in [100, 500], it is a WHITE FLOWER, NOT paper!
+        
+        let head = 0;
+        while (head < queue.length) {
+          const idx = queue[head++];
+          const x = idx % w;
+          const y = Math.floor(idx / w);
+          const p = idx * 4;
+          const r = d[p], g = d[p + 1], b = d[p + 2];
+
+          // Check if white rose petal
+          const inWhiteFlowerZone = (x >= 90 && x <= 540 && y >= 90 && y <= 500);
+          const maxC = Math.max(r, g, b);
+          const minC = Math.min(r, g, b);
+          const chroma = maxC - minC;
+
+          // If in white flower zone and looks like a bright petal, DO NOT treat as background!
+          let isPetal = false;
+          if (inWhiteFlowerZone) {
+            // White rose / daisy petals:
+            if (minC > 210 && chroma < 25) {
+              // But not outer table
+              if (x > 70 && y > 70) {
+                isPetal = true;
+              }
+            }
+          }
+
+          const isGreen = (g > r + 6 && g > b + 4) || (g > 65 && g > r && g - b > 4);
+          const isPink = (r > g + 16 && r > b + 8) || (r > 150 && g < 130);
+          const isYellow = (r > 175 && g > 130 && b < 100);
+
+          if (!isPetal && !isGreen && !isPink && !isYellow && isPaperColor(r, g, b, x, y)) {
+            d[p + 3] = 0; // transparent
+            pushPixel(x + 1, y);
+            pushPixel(x - 1, y);
+            pushPixel(x, y + 1);
+            pushPixel(x, y - 1);
+          }
+        }
+
+        // Clean up outer perimeter
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const p = (y * w + x) * 4;
+            const r = d[p], g = d[p+1], b = d[p+2];
+            const isGreen = (g > r + 6 && g > b + 4);
+            const isPink = (r > g + 16 && r > b + 8);
+            if ((x < 55 || y < 55 || x > 950 || y > 950) && !isGreen && !isPink) {
+              d[p + 3] = 0;
+            }
+          }
+        }
+
+        // Connected component speck removal (< 500 pixels)
+        const labelVisited = new Uint8Array(w * h);
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const idx = y * w + x;
+            if (d[idx * 4 + 3] > 0 && !labelVisited[idx]) {
+              const compQueue = [idx];
+              labelVisited[idx] = 1;
+              let compHead = 0;
+              while (compHead < compQueue.length) {
+                const cIdx = compQueue[compHead++];
+                const cx = cIdx % w;
+                const cy = Math.floor(cIdx / w);
+
+                const neighbors = [
+                  cx > 0 ? cy * w + (cx - 1) : -1,
+                  cx < w - 1 ? cy * w + (cx + 1) : -1,
+                  cy > 0 ? (cy - 1) * w + cx : -1,
+                  cy < h - 1 ? (cy + 1) * w + cx : -1,
+                ];
+
+                for (const n of neighbors) {
+                  if (n >= 0 && !labelVisited[n] && d[n * 4 + 3] > 0) {
+                    labelVisited[n] = 1;
+                    compQueue.push(n);
+                  }
+                }
+              }
+
+              if (compQueue.length < 500) {
+                for (const cIdx of compQueue) {
+                  d[cIdx * 4 + 3] = 0;
+                }
+              }
+            }
+          }
+        }
+
+        // Feather edges (2 passes)
+        for (let pass = 0; pass < 2; pass++) {
+          for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+              const idx = (y * w + x) * 4;
+              if (d[idx + 3] > 0) {
+                let transCount = 0;
+                if (d[((y-1)*w + x)*4 + 3] === 0) transCount++;
+                if (d[((y+1)*w + x)*4 + 3] === 0) transCount++;
+                if (d[(y*w + x-1)*4 + 3] === 0) transCount++;
+                if (d[(y*w + x+1)*4 + 3] === 0) transCount++;
+
+                if (transCount >= 2) {
+                  d[idx + 3] = Math.min(d[idx + 3], 150);
+                } else if (transCount === 1) {
+                  d[idx + 3] = Math.min(d[idx + 3], 215);
+                }
+              }
+            }
+          }
+        }
+
+        // Crop bounding box
+        let minX = w, maxX = 0, minY = h, maxY = 0;
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const idx = (y * w + x) * 4;
+            if (d[idx + 3] > 20) {
+              if (x < minX) minX = x;
+              if (x > maxX) maxX = x;
+              if (y < minY) minY = y;
+              if (y > maxY) maxY = y;
+            }
+          }
+        }
+
+        minX = Math.max(0, minX - 4);
+        minY = Math.max(0, minY - 4);
+        maxX = Math.min(w, maxX + 4);
+        maxY = Math.min(h, maxY + 4);
+
+        const cropW = maxX - minX;
+        const cropH = maxY - minY;
+
+        const cropCanvas = document.createElement('canvas');
+        cropCanvas.width = cropW;
+        cropCanvas.height = cropH;
+        const cropCtx = cropCanvas.getContext('2d');
+
+        ctx.putImageData(imgData, 0, 0);
+        cropCtx.drawImage(canvas, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+
+        const dataUrl = cropCanvas.toDataURL('image/png');
+        await fetch('/api/save-frame', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'floral-corner-clean.png', dataUrl })
+        });
+
+        status.textContent = 'DONE: ' + cropW + 'x' + cropH;
+      } catch (err) {
+        status.textContent = 'ERROR: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    process();
+  </script>
+</body>
+</html>

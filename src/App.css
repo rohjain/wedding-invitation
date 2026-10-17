@@ -518,34 +518,220 @@
   display: none !important;
 }
 
-/* ===== WELCOME SECTION ===== */
+/* ===== WELCOME SECTION (LAGNA PATRIKA) ===== */
 .welcome-section {
   position: relative;
-  padding: 4rem 3.5rem;
+  padding: 4.8rem 1.4rem 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  background-color: var(--color-bg);
-  min-height: 60vh;
   justify-content: center;
+  min-height: 85vh;
+  overflow: hidden;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-.welcome-content {
+.welcome-section::before,
+.welcome-section::after {
+  display: none !important;
+}
+
+/* Watermark Aura behind the card */
+.patrika-watermark-disc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(197, 160, 89, 0.04) 55%, transparent 72%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* The Main Lagna Patrika Cardstock */
+.patrika-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 415px;
+  border-radius: 10px;
+  background-color: #FBF8F0;
+  background-image: url('/patrika-bg.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow:
+    0 22px 55px -10px rgba(45, 59, 49, 0.28),
+    0 6px 20px -2px rgba(197, 160, 89, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+    0 0 0 1px rgba(197, 160, 89, 0.4);
+  padding: 3.8rem 2.2rem 4.8rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.patrika-card-inner {
+  position: relative;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.welcome-text {
-  font-family: var(--font-serif);
+/* Gold Foil Light Reflection Shimmer across Card */
+.patrika-card-shimmer {
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 245, 214, 0.18) 46%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 245, 214, 0.18) 54%,
+    transparent 62%
+  );
+  transform: rotate(25deg);
+  animation: patrikaShimmerSweep 7.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes patrikaShimmerSweep {
+  0%, 70% {
+    transform: translateY(-130%) rotate(25deg);
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(130%) rotate(25deg);
+    opacity: 1;
+  }
+  90%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Header with Kalash & Shloka */
+.patrika-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.15rem;
+}
+
+.patrika-kalash-icon {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 4px 10px rgba(163, 128, 66, 0.35));
+  margin-bottom: 4px;
+  animation: kalashGentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes kalashGentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.patrika-shloka-text {
+  font-family: 'Rozha One', 'Eczar', var(--font-serif);
+  font-size: 1.12rem;
+  font-weight: 500;
+  color: #991B1B;
+  letter-spacing: 2px;
+  margin: 1px 0 3px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+}
+
+.patrika-vivah-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rozha One', 'Eczar', var(--font-serif);
   font-size: 1.2rem;
+  letter-spacing: 4px;
+  margin: 1px 0 5px;
+  background: linear-gradient(135deg, #7A5615 0%, #AA7C11 25%, #4A3305 60%, #AA7C11 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.9));
+}
+
+.patrika-badge-dot {
+  font-size: 0.85rem;
+  color: #AA7C11;
+  -webkit-text-fill-color: #AA7C11;
+}
+
+/* Dividers */
+.patrika-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem 0;
+  opacity: 0.9;
+}
+
+/* Content Area */
+.patrika-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.1rem 0;
+}
+
+.patrika-title {
+  font-family: 'Cinzel', var(--font-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 3.5px;
+  color: #8C6A28;
+  margin: 0.2rem 0 0.25rem;
+  text-transform: uppercase;
+}
+
+.welcome-text-intro {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
   font-style: italic;
-  color: var(--color-green);
-  line-height: 1.8;
-  opacity: 0.75;
-  max-width: 340px;
-  margin: 1.2rem 0;
+  color: #324336;
+  line-height: 1.48;
+  margin: 0.1rem 0;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+.patrika-couple-names {
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: #1A261D;
+  margin: 0.1rem 0 0.15rem;
+  line-height: 1.1;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.9));
+}
+
+.welcome-text-blessing {
+  font-family: var(--font-serif);
+  font-size: 1.04rem;
+  font-style: italic;
+  color: #324336;
+  line-height: 1.58;
+  max-width: 275px;
+  margin: 0.1rem 0 0.2rem;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
 }
 
 .inline-heart {
@@ -558,89 +744,426 @@
   display: inline;
   width: 14px;
   height: 14px;
-  fill: var(--color-green);
+  fill: #991B1B;
   vertical-align: middle;
+}
+
+/* Footer Blessings / Nimantran */
+.patrika-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.15rem;
+  margin-bottom: 0.2rem;
+}
+
+.patrika-blessing-header {
+  font-family: 'Rozha One', 'Eczar', var(--font-serif);
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: #991B1B;
+  letter-spacing: 2px;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+}
+
+/* ===== CONTINUOUS UNIFIED PAPER BACKGROUND FOR ALL INVITATION SECTIONS ===== */
+.invitation-seamless-body {
+  position: relative;
+  width: 100%;
+  background-color: #FAF5EB;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(247, 240, 226, 0.45)),
+    var(--patrika-texture, url('/patrika-texture.jpg'));
+  background-repeat: repeat;
+  background-size: 340px 340px;
+}
+
+.welcome-section,
+.scratch-section,
+.gallery-section,
+.countdown-section,
+.timeline-section,
+.venue-section,
+.dressCode-section,
+.prewedding-section,
+.closing-section,
+.footer-section {
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* ===== SCRATCH SECTION ===== */
 .scratch-section {
-  position: relative;
-  padding: 3rem 2rem 1rem;
+  padding: 3rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .scratch-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
-.scratch-card {
+.scratch-card-wrapper {
   position: relative;
-  width: 260px;
-  height: 260px;
-  margin: 1.5rem auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 320px;
+  height: 320px;
+  max-width: 90vw;
+  margin: 1.5rem auto 1rem;
+  border-radius: 24px;
+  box-shadow: 0 16px 38px rgba(45, 58, 48, 0.18), 0 2px 8px rgba(0, 0, 0, 0.06);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.scratch-hidden-content {
+/* 1. Physical Luxury Cardstock Plaque Underneath */
+.scratch-card-base {
   position: absolute;
   inset: 0;
+  border-radius: 24px;
+  background-color: #FAF6EE;
+  background-image: 
+    linear-gradient(150deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.90) 55%, rgba(237, 228, 212, 0.92) 100%),
+    var(--patrika-texture, url('/patrika-texture.jpg'));
+  background-size: cover;
+  border: 1.5px solid rgba(197, 160, 89, 0.55);
+  box-shadow:
+    inset 0 0 0 6px #FAF7F0,
+    inset 0 0 0 7.5px rgba(197, 160, 89, 0.7),
+    inset 0 3px 14px rgba(197, 160, 89, 0.15),
+    0 8px 24px rgba(45, 58, 48, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: none;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.card-filigree {
+  position: absolute;
+  color: #C5A059;
+  font-size: 0.95rem;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.card-filigree.top-left { top: 12px; left: 12px; }
+.card-filigree.top-right { top: 12px; right: 12px; }
+.card-filigree.bottom-left { bottom: 12px; left: 12px; }
+.card-filigree.bottom-right { bottom: 12px; right: 12px; }
+
+.card-inner-border {
+  position: absolute;
+  inset: 11px;
+  border-radius: 15px;
+  border: 1px dashed rgba(197, 160, 89, 0.35);
   pointer-events: none;
 }
 
-.scratch-date-label {
+/* Header & Footer on Physical Cardstock */
+.card-header-badge {
+  position: absolute;
+  top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.card-header-line {
+  width: 30px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.7));
+}
+
+.card-header-badge .card-header-line:last-child {
+  transform: scaleX(-1);
+}
+
+.card-header-text {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  color: var(--color-gold-dark);
-  letter-spacing: 0.15em;
+  font-size: 0.68rem;
+  color: #A38042;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  margin-bottom: 0.3rem;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.card-footer-badge {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.scratch-day-highlight {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: var(--color-green);
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* Hidden Date Content (100% Nested within Heart Belly) */
+.scratch-hidden-content {
+  position: absolute;
+  top: 102px;
+  width: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.scratch-couple-names {
+  font-family: var(--font-script);
+  font-size: 1.45rem;
+  color: #A38042;
+  margin: 0;
+  line-height: 1;
+  opacity: 0.95;
+}
+
+.scratch-date-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  margin: 2px 0;
 }
 
 .scratch-date {
   font-family: var(--font-script);
-  font-size: 2.1rem;
+  font-size: 2.35rem;
   color: var(--color-green);
-  font-weight: 400;
-  line-height: 1.1;
-  max-width: 140px;
-  text-align: center;
+  font-weight: 500;
+  line-height: 1.05;
+  text-shadow: 0 1px 2px rgba(45, 58, 48, 0.1);
 }
 
 .scratch-year {
-  font-family: var(--font-script);
-  font-size: 2.4rem;
-  color: var(--color-green);
-  font-weight: 400;
-  opacity: 0.9;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  color: #A38042;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  margin-top: 1px;
 }
 
-.scratch-canvas {
+/* Golden Shimmer Sweep Reflection */
+.card-shimmer-sweep {
+  display: none;
+}
+
+.scratch-card-wrapper.is-revealed .card-shimmer-sweep {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 240, 190, 0.45) 45%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 240, 190, 0.45) 55%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  animation: shimmerSweep 1.6s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes shimmerSweep {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+/* 2. Realistic Foil Canvas */
+.scratch-foil-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  cursor: pointer;
+  z-index: 2;
+  cursor: none;
   touch-action: none;
-  filter: drop-shadow(0 6px 16px rgba(59, 74, 63, 0.2));
+  filter: drop-shadow(0 8px 22px rgba(45, 58, 48, 0.28));
+  transition:
+    opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.75s ease,
+    transform 0.75s ease;
+  will-change: opacity, filter, transform;
 }
 
-.scratch-card.revealed .scratch-canvas {
-  display: none;
+.scratch-foil-canvas.revealed-fade {
+  opacity: 0;
+  filter: blur(8px) brightness(1.2);
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* 3. Shavings & Dust Particles Overlay */
+.scratch-particles-canvas {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* 4. Desktop 3D Gold Wedding Coin Cursor */
+.scratch-coin-cursor {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.04s ease-out;
+}
+
+.coin-disc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #FFF4BA 0%, #D4AF37 52%, #997320 92%);
+  border: 1.5px solid #FFED9E;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 2px rgba(160, 120, 30, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.coin-core {
+  font-size: 15px;
+  line-height: 1;
+  user-select: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+.scratch-coin-cursor.scratching .coin-disc {
+  transform: rotate(-25deg) scale(0.92);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 2px rgba(160, 120, 30, 0.9);
+}
+
+.coin-contact-shadow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  filter: blur(3px);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.scratch-coin-cursor.scratching .coin-contact-shadow {
+  transform: translateX(-50%) scale(0.75);
+  opacity: 0.45;
+}
+
+/* Helper Hints & Instant Reveal */
+.scratch-interaction-hints {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.scratch-helper-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-green);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.3s ease;
+}
+
+.scratch-helper-text.faded {
+  opacity: 0.4;
+}
+
+.quick-reveal-link {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--color-gold-dark);
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 4px 8px;
+}
+
+.quick-reveal-link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.scratch-revealed-banner {
+  margin-top: 0.75rem;
+  animation: bannerPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.revealed-celebration-title {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #A38042;
+  letter-spacing: 0.05em;
+}
+
+@keyframes bannerPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Action Buttons (Save Date & Google Calendar) */
+.save-date-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1.2rem;
 }
 
 .save-date-btn {
@@ -649,32 +1172,34 @@
   gap: 8px;
   background: var(--color-green);
   color: var(--color-cream);
-  border: none;
-  padding: 0.75rem 2rem;
+  border: 1.5px solid var(--color-green);
+  padding: 0.75rem 1.8rem;
   border-radius: 30px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  text-decoration: none;
   cursor: pointer;
-  margin-top: 0.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(59, 74, 63, 0.22);
 }
 
 .save-date-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 74, 63, 0.3);
+  background: var(--color-green-light);
+  border-color: var(--color-green-light);
+  box-shadow: 0 6px 20px rgba(59, 74, 63, 0.32);
+  color: var(--color-cream);
 }
 
 /* ===== GALLERY SECTION ===== */
 .gallery-section {
-  position: relative;
   padding: 1rem 2rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--color-bg);
 }
 
 .gallery-content {
@@ -734,13 +1259,11 @@
 
 /* ===== COUNTDOWN SECTION ===== */
 .countdown-section {
-  position: relative;
   padding: 3rem 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .countdown-content {
@@ -757,14 +1280,14 @@
 }
 
 .countdown-item {
-  background: rgba(235, 227, 212, 0.85);
-  border: 1px solid rgba(197, 160, 89, 0.35);
+  background: rgba(255, 252, 246, 0.88);
+  border: 1px solid rgba(197, 160, 89, 0.4);
   box-shadow: 0 4px 15px rgba(59, 74, 63, 0.08);
   border-radius: 12px;
   padding: 1rem 0.8rem 0.6rem;
   min-width: 72px;
   text-align: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 }
 
 .countdown-number {
@@ -789,13 +1312,11 @@
 /* ===== TIMELINE SECTION ===== */
 .timeline-section,
 .prewedding-section {
-  position: relative;
   padding: 3rem 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .timeline-content,
@@ -887,13 +1408,11 @@
 
 /* ===== VENUE SECTION ===== */
 .venue-section {
-  position: relative;
   padding: 3rem 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .venue-content {
@@ -969,13 +1488,11 @@
 
 /* ===== DRESS CODE ===== */
 .dressCode-section {
-  position: relative;
   padding: 3rem 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .dressCode-content {
@@ -1013,43 +1530,15 @@
   max-width: 300px;
 }
 
-/* ===== INFO SECTIONS (Transport, Accommodation, Gifts) ===== */
-.info-section {
-  position: relative;
-  padding: 3rem 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: var(--color-bg);
-}
-
-.info-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.info-text {
-  font-family: var(--font-serif);
-  font-size: 0.95rem;
-  color: var(--color-green);
-  opacity: 0.65;
-  line-height: 1.7;
-  max-width: 340px;
-  margin-top: 1rem;
-}
 
 
 /* ===== CLOSING SECTION ===== */
 .closing-section {
-  position: relative;
   padding: 3rem 2rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--color-bg);
 }
 
 .closing-content {
@@ -1065,7 +1554,34 @@
   font-weight: 400;
   line-height: 1.4;
   max-width: 320px;
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem;
+}
+
+.closing-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0.75rem 0 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closing-image {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: contrast(1.02);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.closing-image:hover {
+  transform: scale(1.03);
 }
 
 .closing-names {
@@ -1078,8 +1594,6 @@
 
 /* ===== FOOTER ===== */
 .footer-section {
-  position: relative;
-  background: var(--color-bg);
   padding: 2rem 2rem 5.5rem;
   text-align: center;
   overflow: hidden;
@@ -1200,17 +1714,33 @@
     font-size: 2.2rem;
   }
 
-  .welcome-text {
-    font-size: 1.05rem;
-  }
-
-  .floral-border {
-    width: 30px;
-    background-size: 30px auto;
-  }
-
   .welcome-section {
-    padding: 3rem 2.8rem;
+    padding: 3.5rem 0.8rem 3rem;
+    min-height: 75vh;
+  }
+
+  .patrika-card {
+    padding: 3rem 1.6rem 2.6rem;
+    max-width: 360px;
+  }
+
+  .welcome-text {
+    font-size: 1.04rem;
+    line-height: 1.75;
+    max-width: 270px;
+  }
+
+  .patrika-shloka-text {
+    font-size: 1.02rem;
+  }
+
+  .patrika-vivah-badge {
+    font-size: 1.06rem;
+    letter-spacing: 3px;
+  }
+
+  .patrika-family-names {
+    font-size: 0.76rem;
   }
 }
 
