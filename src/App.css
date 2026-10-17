@@ -498,13 +498,14 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 32px;
+  width: 40px;
   background-image: url('/floral-vine-clean.png');
-  background-size: 32px auto;
+  background-size: 40px auto;
   background-repeat: repeat-y;
   z-index: 10;
   pointer-events: none;
-  opacity: 0.95;
+  opacity: 1;
+  filter: drop-shadow(0 2px 6px rgba(59, 74, 63, 0.22)) saturate(1.15);
 }
 
 .invitation-vine-border.vine-left {
@@ -521,12 +522,12 @@
 .floral-corner {
   position: absolute;
   top: 0;
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   z-index: 12;
   pointer-events: none;
   object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(59, 74, 63, 0.12));
+  filter: drop-shadow(0 4px 12px rgba(59, 74, 63, 0.22)) saturate(1.15);
 }
 
 .floral-corner.corner-left {
@@ -1762,13 +1763,13 @@
   }
 
   .floral-corner {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
 
   .invitation-vine-border {
-    width: 28px;
-    background-size: 28px auto;
+    width: 34px;
+    background-size: 34px auto;
   }
 }
 
