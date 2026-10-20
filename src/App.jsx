@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, VolumeX, ChevronDown, MapPin, PartyPopper } from 'lucide-react';
 import WaxSealSection from './components/WaxSealSection';
+import invitationBg from './assets/invitation-bg.jpg';
 import './App.css';
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -837,19 +838,11 @@ function App() {
 
       <div
         className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
-        style={{
-          '--invitation-bg': `url(${asset('/invitation-bg.jpg')})`,
-          '--gold-paper-bg': `url(${asset('/invitation-bg.jpg')})`,
-          '--patrika-texture': `url(${asset('/invitation-bg.jpg')})`,
-        }}
       >
         <HeroSection isOpen={isOpen} curtainsOpened={curtainsOpened} />
         <div
           className="invitation-seamless-body"
-          style={{
-            '--invitation-bg': `url(${asset('/invitation-bg.jpg')})`,
-            '--patrika-texture': `url(${asset('/invitation-bg.jpg')})`,
-          }}
+          style={{ backgroundImage: `url("${invitationBg}")` }}
         >
           <WelcomeSection />
           <WaxSealSection isMuted={isMuted} />

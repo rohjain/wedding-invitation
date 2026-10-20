@@ -779,12 +779,13 @@ body.doors-locked {
   position: relative;
   width: 100%;
   background-color: #F5E9D3;
-  background-image: var(--invitation-bg, var(--patrika-texture, url('/invitation-bg.jpg')));
+  background-image: url('./assets/invitation-bg.jpg');
   background-repeat: repeat;
   background-size: 500px auto;
 }
 
 .welcome-section,
+.wax-section,
 .scratch-section,
 .gallery-section,
 .countdown-section,
@@ -836,7 +837,7 @@ body.doors-locked {
   background-color: #FAF6EE;
   background-image: 
     linear-gradient(150deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.90) 55%, rgba(237, 228, 212, 0.92) 100%),
-    var(--invitation-bg, var(--patrika-texture, url('/invitation-bg.jpg')));
+    url('./assets/invitation-bg.jpg');
   background-size: cover;
   border: 1.5px solid rgba(197, 160, 89, 0.55);
   box-shadow:
