@@ -1,0 +1,426 @@
+/* ========================================================
+   ROYAL WAX SEAL DATE REVEAL SECTION
+   ======================================================== */
+
+.wax-section {
+  padding: 3rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wax-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== 3D HEART STAGE WRAPPER ===== */
+.wax-envelope-wrapper {
+  position: relative;
+  width: 280px;
+  height: 270px;
+  max-width: 90vw;
+  margin: 1.5rem auto 1rem;
+  perspective: 1200px;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  outline: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wax-envelope-wrapper:not(.is-opened):hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.wax-envelope-wrapper.is-opened {
+  cursor: default;
+}
+
+/* ===== 1. REVEALED HEART BASE ===== */
+.wax-heart-base {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.heart-base-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Date details revealed inside Heart */
+.wax-date-content {
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.wax-couple-names {
+  font-family: var(--font-script, 'Great Vibes', cursive);
+  font-size: 1.75rem;
+  color: #A38042;
+  margin: 0;
+  line-height: 1.1;
+  opacity: 0.95;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.wax-date-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  margin: 4px 0 0;
+}
+
+.wax-date-day {
+  font-family: var(--font-script, 'Great Vibes', cursive);
+  font-size: 2.6rem;
+  color: var(--color-green, #3B4A3F);
+  font-weight: 500;
+  line-height: 1.05;
+  text-shadow: 0 1px 2px rgba(45, 58, 48, 0.12);
+}
+
+.wax-date-year {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 1.95rem;
+  color: #A38042;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.05;
+  margin-top: 1px;
+}
+
+/* Shimmer Sweep Animation Across Heart Base */
+.heart-shimmer-sweep {
+  display: none;
+}
+
+.wax-envelope-wrapper.is-opened .heart-shimmer-sweep {
+  display: block;
+  position: absolute;
+  inset: 0;
+  clip-path: url(#heart-base-clip);
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 240, 190, 0.45) 45%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 240, 190, 0.45) 55%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  animation: waxShimmerSweep 1.8s ease forwards;
+  pointer-events: none;
+  z-index: 4;
+}
+
+@keyframes waxShimmerSweep {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+/* ===== 2. HEART-SHAPED ENVELOPE FOLDING FLAPS ===== */
+.wax-heart-flaps-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  perspective: 1200px;
+}
+
+.wax-heart-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+}
+
+.wax-heart-wing {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.7s ease;
+  will-change: transform, opacity;
+}
+
+.wax-heart-wing.wing-left {
+  left: 0;
+  transform-origin: 0% 50%;
+}
+
+.wax-heart-wing.wing-right {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.heart-wing-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* 3D Heart Wings Swing Open on Reveal */
+.wax-envelope-wrapper.is-opened .wing-left {
+  transform: rotateY(-120deg) translateX(-14px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wax-envelope-wrapper.is-opened .wing-right {
+  transform: rotateY(120deg) translateX(14px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Golden Satin Ribbon Band Across Heart */
+.wax-ribbon-band {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 236px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    rgba(197, 160, 89, 0.15) 0%,
+    rgba(229, 186, 101, 0.85) 25%,
+    rgba(253, 236, 184, 0.98) 50%,
+    rgba(229, 186, 101, 0.85) 75%,
+    rgba(197, 160, 89, 0.15) 100%
+  );
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 6;
+  transition: transform 0.6s ease, opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.ribbon-gold-thread {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent, #FFFFFF, transparent);
+  opacity: 0.7;
+}
+
+.wax-envelope-wrapper.is-opened .wax-ribbon-band {
+  transform: translate(-50%, -50%) scaleX(0);
+  opacity: 0;
+}
+
+/* ===== 3. 3D WAX SEAL ANCHOR ===== */
+.wax-seal-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 112px;
+  height: 112px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 8px 16px rgba(20, 30, 24, 0.4));
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wax-envelope-wrapper:not(.is-opened):hover .wax-seal-anchor {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.wax-seal-half {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.55s ease;
+  will-change: transform, opacity;
+}
+
+.wax-seal-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Crack Line Overlay */
+.wax-crack-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  filter: drop-shadow(0 0 6px #FFE8A3) drop-shadow(0 0 12px #D4AF37);
+  pointer-events: none;
+  animation: crackFlash 0.45s ease forwards;
+}
+
+@keyframes crackFlash {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 100;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+/* Seal Fracture Splitting Animation */
+.wax-envelope-wrapper.is-opened .seal-half-left {
+  transform: translate(-42px, -12px) rotate(-18deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wax-envelope-wrapper.is-opened .seal-half-right {
+  transform: translate(42px, 14px) rotate(20deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Golden Halo Pulse (Hint before break) */
+.wax-seal-pulse-ring {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(229, 186, 101, 0.5);
+  box-shadow: 0 0 16px rgba(229, 186, 101, 0.4);
+  animation: sealPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sealPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+}
+
+/* ===== 4. PARTICLE CANVAS ===== */
+.wax-particles-canvas {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* ===== HINTS & RE-SEAL CONTROLS ===== */
+.wax-hint-container {
+  margin-top: 0.6rem;
+  display: flex;
+  justify-content: center;
+}
+
+.wax-hint-text {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.82rem;
+  color: var(--color-green, #3B4A3F);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: 0.04em;
+  animation: hintBreathe 2s ease-in-out infinite alternate;
+}
+
+.wax-hint-sparkle {
+  color: #C5A059;
+}
+
+@keyframes hintBreathe {
+  0% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.wax-revealed-banner {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bannerPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wax-reseal-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  color: #A38042;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  opacity: 0.85;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.wax-reseal-btn:hover {
+  opacity: 1;
+  color: var(--color-green, #3B4A3F);
+  transform: translateY(-1px);
+}

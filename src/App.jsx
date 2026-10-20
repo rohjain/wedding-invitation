@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Volume2, VolumeX, Globe, ChevronDown, Clock, MapPin, Calendar, Shirt, PartyPopper } from 'lucide-react';
-import ScratchSection from './components/ScratchSection';
+import { Volume2, VolumeX, ChevronDown, MapPin, PartyPopper } from 'lucide-react';
+import WaxSealSection from './components/WaxSealSection';
 import './App.css';
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -89,7 +89,11 @@ function WavySeparator() {
 function GatefoldDoors({ onOpen, isOpen }) {
   return (
     <div className={`gatefold-overlay ${isOpen ? 'is-open' : ''}`}>
-      <div className="gatefold-doors">
+      <div
+        className="gatefold-doors"
+        onClick={!isOpen ? onOpen : undefined}
+        style={{ cursor: !isOpen ? 'pointer' : 'default' }}
+      >
         {/* Left Door */}
         <div className="gate-door gate-door-left">
           <img src={asset('/green-door.jpg')} alt="" className="door-bg" />
@@ -109,7 +113,19 @@ function GatefoldDoors({ onOpen, isOpen }) {
         </div>
 
         {!isOpen && (
-          <div className="plaque-tap-trigger" onClick={onOpen} role="button" tabIndex={0}>
+          <div
+            className="plaque-tap-trigger"
+            onClick={onOpen}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onOpen();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Tap to open invitation"
+          >
             <div className="plaque-pulse" />
           </div>
         )}
@@ -177,8 +193,6 @@ function HeroSection({ isOpen, curtainsOpened }) {
         >
           <h1 className="name-script">Rohit</h1>
           <p className="person-details">Son of Sunil Jain &amp; Usha Jain</p>
-          <p className="person-details">B.E., M.S.</p>
-          <p className="person-details">Data Scientist</p>
         </motion.div>
 
         <motion.div
@@ -196,10 +210,8 @@ function HeroSection({ isOpen, curtainsOpened }) {
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
-          <h2 className="name-script">Priya</h2>
+          <h2 className="name-script">Priyanshi</h2>
           <p className="person-details">Daughter of Dinesh Jain &amp; Rani Jain</p>
-          <p className="person-details">MBBS, M.D</p>
-          <p className="person-details">Pediatrician</p>
         </motion.div>
 
         <motion.div
@@ -402,7 +414,7 @@ function WelcomeSection() {
             <p className="welcome-text-intro">
               We are honored to welcome you to the<br />Wedding ceremony of
             </p>
-            <div className="patrika-couple-names">Rohit &amp; Priya</div>
+            <div className="patrika-couple-names">Rohit &amp; Priyanshi</div>
             <p className="welcome-text-blessing">
               As they begin their sacred journey together in faith and love,<br />
               we thank you from the bottom of our hearts for being part of this blessed occasion{' '}
@@ -422,6 +434,16 @@ function WelcomeSection() {
   );
 }
 
+
+/* ===== SECTION VINE BORDERS (PER-SECTION 90% COVERAGE) ===== */
+function SectionVineBorders() {
+  return (
+    <>
+      <div className="section-vine-border vine-left" aria-hidden="true" />
+      <div className="section-vine-border vine-right" aria-hidden="true" />
+    </>
+  );
+}
 
 /* ===== PHOTO GALLERY ===== */
 function GallerySection() {
@@ -446,6 +468,7 @@ function GallerySection() {
 
   return (
     <section className="gallery-section" id="gallery">
+      <SectionVineBorders />
 
       <motion.div
         className="gallery-content"
@@ -519,6 +542,7 @@ function CountdownSection() {
 
   return (
     <section className="countdown-section" id="countdown">
+      <SectionVineBorders />
 
       <motion.div
         className="countdown-content"
@@ -552,68 +576,11 @@ function CountdownSection() {
   );
 }
 
-/* ===== PROGRAM TIMELINE ===== */
-function TimelineSection() {
-  const events = [
-    {
-      date: 'SATURDAY, NOV 21, 2026',
-      items: [
-        { time: '10:00 AM', title: 'Guest Arrival', desc: 'We welcome you.. ♥' },
-        { time: '10:30 AM', title: 'Wedding Ceremony', desc: 'Your presence means a lot!' },
-      ],
-    },
-    {
-      date: 'SUNDAY, NOV 22, 2026',
-      items: [
-        { time: '7:30 PM', title: 'Reception', desc: '' },
-      ],
-    },
-  ];
-
-  return (
-    <section className="timeline-section" id="timeline">
-
-      <motion.div
-        className="timeline-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <Clock size={24} className="section-icon" />
-        <h2 className="section-title-script">Program Timeline</h2>
-        <SectionDivider />
-
-        {events.map((group, gi) => (
-          <div key={gi} className="timeline-group">
-            <div className="timeline-date-row">
-              <span className="timeline-date-line" />
-              <span className="timeline-date">{group.date}</span>
-              <span className="timeline-date-line" />
-            </div>
-            {group.items.map((item, ii) => (
-              <div key={ii} className="timeline-item">
-                <span className="timeline-time">{item.time}</span>
-                <span className="timeline-bar" />
-                <div className="timeline-info">
-                  <h4 className="timeline-title">{item.title}</h4>
-                  {item.desc && <p className="timeline-desc">{item.desc}</p>}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
-      </motion.div>
-
-      <WavySeparator />
-    </section>
-  );
-}
-
 /* ===== VENUE SECTION ===== */
 function VenueSection() {
   return (
     <section className="venue-section" id="venue">
+      <SectionVineBorders />
 
       <motion.div
         className="venue-content"
@@ -626,21 +593,22 @@ function VenueSection() {
         <h2 className="section-title-script">Venue</h2>
         <SectionDivider />
 
-        <h3 className="venue-name">Grand Palace Hall</h3>
-        <p className="venue-location">City centre, London</p>
+        <h3 className="venue-name">Bhagwati Palace</h3>
+        <p className="venue-location">Ashta</p>
 
         <div className="venue-map">
           <iframe
-            title="Venue Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.8741!2d-0.1657!3d51.5504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDMzJzAxLjQiTiAwwrAwOSc1Ni41Ilc!5e0!3m2!1sen!2suk!4v1600000000000!5m2!1sen!2suk"
+            title="Venue Map - Bhagwati Palace, Ashta"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.4894680360862!2d76.7200245753133!3d23.005793779185563!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397cdb1c37e52935%3A0x1201aa948e6f2feb!2sBhagwati%20palace%2Chotel!5e0!3m2!1sen!2sin!4v1792469589458!5m2!1sen!2sin"
             width="100%"
             height="250"
             style={{ border: 0, borderRadius: '12px' }}
             allowFullScreen=""
             loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
           <a
-            href="https://maps.google.com"
+            href="https://www.google.com/maps/search/?api=1&query=Bhagwati+palace,+hotel,+Ashta"
             target="_blank"
             rel="noopener noreferrer"
             className="map-link"
@@ -650,47 +618,13 @@ function VenueSection() {
         </div>
 
         <a
-          href="https://maps.google.com"
+          href="https://www.google.com/maps/search/?api=1&query=Bhagwati+palace,+hotel,+Ashta"
           target="_blank"
           rel="noopener noreferrer"
           className="view-maps-btn"
         >
           View on Google Maps
         </a>
-      </motion.div>
-
-      <WavySeparator />
-    </section>
-  );
-}
-
-/* ===== DRESS CODE SECTION ===== */
-function DressCodeSection() {
-  return (
-    <section className="dressCode-section" id="dressCode">
-
-      <motion.div
-        className="dressCode-content"
-        variants={fadeInUp(0.2)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-      >
-        <Shirt size={24} className="section-icon" />
-        <h2 className="section-title-script">Dress Code</h2>
-        <SectionDivider />
-
-        <div className="dress-category">
-          <h3 className="dress-title">Women</h3>
-          <div className="dress-underline" />
-          <p className="dress-desc">Elegant formal attire in pastel or jewel tones</p>
-        </div>
-
-        <div className="dress-category">
-          <h3 className="dress-title">Men</h3>
-          <div className="dress-underline" />
-          <p className="dress-desc">Suit or traditional formal wear</p>
-        </div>
       </motion.div>
 
       <WavySeparator />
@@ -712,10 +646,15 @@ function PreWeddingSection() {
         { time: '8:00 PM', title: 'Sangeet', desc: "Music, Dance & Dinner" },
       ],
     },
+    {
+      date: 'SATURDAY, NOV 21, 2026',
+      items: [{ time: '7:30 PM', title: 'Reception' }],
+    },
   ];
 
   return (
     <section className="prewedding-section" id="prewedding">
+      <SectionVineBorders />
 
       <motion.div
         className="prewedding-content"
@@ -725,7 +664,7 @@ function PreWeddingSection() {
         viewport={{ once: true, margin: '-50px' }}
       >
         <PartyPopper size={24} className="section-icon" />
-        <h2 className="section-title-script">Pre-Wedding Events</h2>
+        <h2 className="section-title-script">Wedding Events</h2>
         <SectionDivider />
 
         {events.map((group, gi) => (
@@ -759,6 +698,7 @@ function PreWeddingSection() {
 function ClosingSection() {
   return (
     <section className="closing-section">
+      <SectionVineBorders />
 
       <motion.div
         className="closing-content"
@@ -771,11 +711,11 @@ function ClosingSection() {
         <div className="closing-image-wrapper">
           <img
             src={asset('/celebrate-couple.jpg')}
-            alt="Rohit & Priya"
+            alt="Rohit & Priyanshi"
             className="closing-image"
           />
         </div>
-        <p className="closing-names">Rohit &amp; Priya</p>
+        <p className="closing-names">Rohit &amp; Priyanshi</p>
         <WavySeparator />
       </motion.div>
     </section>
@@ -783,16 +723,7 @@ function ClosingSection() {
 }
 
 function Footer() {
-  return (
-    <footer className="footer-section">
-      <div className="footer-floral" />
-      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-        <motion.p className="footer-text" variants={fadeIn(0.2)}>
-          Create your own Invitation on <span className="footer-brand">Zareqia</span>
-        </motion.p>
-      </motion.div>
-    </footer>
-  );
+  return <footer className="footer-section" />;
 }
 
 /* ===== MAIN APP ===== */
@@ -803,8 +734,70 @@ function App() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef(null);
 
+  // Ensure scroll is at the top on mount and prevent browser auto-restoring scroll
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    const handleBeforeUnload = () => {
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  // Lock scroll while doors are present
+  useEffect(() => {
+    if (!doorsGone) {
+      document.documentElement.classList.add('doors-locked');
+      document.body.classList.add('doors-locked');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } else {
+      document.documentElement.classList.remove('doors-locked');
+      document.body.classList.remove('doors-locked');
+    }
+
+    return () => {
+      document.documentElement.classList.remove('doors-locked');
+      document.body.classList.remove('doors-locked');
+    };
+  }, [doorsGone]);
+
   const handleOpen = () => {
     if (isOpen) return;
+
+    // Reset scroll to the absolute top of the page immediately
+    const prevScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    const wrapper = document.querySelector('.invitation-wrapper');
+    if (wrapper) {
+      wrapper.scrollTop = 0;
+    }
+
+    const hero = document.getElementById('hero');
+    if (hero) {
+      hero.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      document.documentElement.style.scrollBehavior = prevScrollBehavior;
+    });
+
     setIsOpen(true);
 
     if (audioRef.current) {
@@ -813,7 +806,10 @@ function App() {
     }
 
     setTimeout(() => setCurtainsOpened(true), 2500);
-    setTimeout(() => setDoorsGone(true), 2200);
+    setTimeout(() => {
+      setDoorsGone(true);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 2200);
   };
 
   const toggleMute = () => {
@@ -841,46 +837,25 @@ function App() {
 
       <div
         className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
-        style={{ '--gold-paper-bg': `url(${asset('/gold-paper-bg.jpg')})` }}
+        style={{
+          '--invitation-bg': `url(${asset('/invitation-bg.jpg')})`,
+          '--gold-paper-bg': `url(${asset('/invitation-bg.jpg')})`,
+          '--patrika-texture': `url(${asset('/invitation-bg.jpg')})`,
+        }}
       >
         <HeroSection isOpen={isOpen} curtainsOpened={curtainsOpened} />
         <div
           className="invitation-seamless-body"
-          style={{ '--patrika-texture': `url(${asset('/patrika-texture-new.jpg')})` }}
+          style={{
+            '--invitation-bg': `url(${asset('/invitation-bg.jpg')})`,
+            '--patrika-texture': `url(${asset('/invitation-bg.jpg')})`,
+          }}
         >
-          {/* Floral Corners - starting from Welcome section */}
-          <img
-            src={asset('/floral-corner-clean.png')}
-            alt=""
-            className="floral-corner corner-left"
-            aria-hidden="true"
-          />
-          <img
-            src={asset('/floral-corner-clean.png')}
-            alt=""
-            className="floral-corner corner-right"
-            aria-hidden="true"
-          />
-
-          {/* Continuous Floral Side Vines - starting from Welcome section */}
-          <div
-            className="invitation-vine-border vine-left"
-            aria-hidden="true"
-            style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }}
-          />
-          <div
-            className="invitation-vine-border vine-right"
-            aria-hidden="true"
-            style={{ backgroundImage: `url(${asset('/floral-vine-clean.png')})` }}
-          />
-
           <WelcomeSection />
-          <ScratchSection isMuted={isMuted} />
+          <WaxSealSection isMuted={isMuted} />
           <GallerySection />
           <CountdownSection />
-          <TimelineSection />
           <VenueSection />
-          <DressCodeSection />
           <PreWeddingSection />
           <ClosingSection />
           <Footer />
@@ -894,11 +869,7 @@ function App() {
         </button>
       </div>
 
-      <div className={`floating-controls bottom-left ${isOpen ? '' : 'on-doors'}`}>
-        <button className="pill-btn">
-          <Globe size={14} className="icon-mr" /> Arabic
-        </button>
-      </div>
+
     </div>
   );
 }

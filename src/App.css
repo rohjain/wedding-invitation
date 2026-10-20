@@ -1,4 +1,13 @@
 /* ===== GATEFOLD DOORS ===== */
+html.doors-locked,
+body.doors-locked {
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+}
+
 .gatefold-container {
   position: fixed;
   inset: 0;
@@ -6,6 +15,8 @@
   display: flex;
   justify-content: center;
   pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: none;
 }
 
 .gatefold-overlay {
@@ -180,6 +191,12 @@
   overflow-x: hidden;
   overflow-y: hidden;
   background-color: var(--color-bg);
+}
+
+.invitation-wrapper.invitation-hidden {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .invitation-wrapper.invitation-revealed {
@@ -488,54 +505,28 @@
   height: 30px;
 }
 
-/* ===== CONTINUOUS FLORAL SIDE VINES & CORNERS ===== */
-.invitation-main-flow {
-  position: relative;
-  width: 100%;
-}
-
-.invitation-vine-border {
+/* ===== SECTION FLORAL SIDE VINES (PER-SECTION 90% COVERAGE) ===== */
+.section-vine-border {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  background-image: url('/floral-vine-clean.png');
-  background-size: 40px auto;
+  top: 5%;
+  height: 91%;
+  width: 56px;
+  background-image: url('./assets/floral-vine-border.png');
+  background-size: 55px auto;
   background-repeat: repeat-y;
   z-index: 10;
   pointer-events: none;
   opacity: 1;
-  filter: drop-shadow(0 2px 6px rgba(59, 74, 63, 0.22)) saturate(1.15);
 }
 
-.invitation-vine-border.vine-left {
+.section-vine-border.vine-left {
   left: 0;
   background-position: left top;
 }
 
-.invitation-vine-border.vine-right {
+.section-vine-border.vine-right {
   right: 0;
   background-position: left top;
-  transform: scaleX(-1);
-}
-
-.floral-corner {
-  position: absolute;
-  top: 0;
-  width: 140px;
-  height: 140px;
-  z-index: 12;
-  pointer-events: none;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(59, 74, 63, 0.22)) saturate(1.15);
-}
-
-.floral-corner.corner-left {
-  left: 0;
-}
-
-.floral-corner.corner-right {
-  right: 0;
   transform: scaleX(-1);
 }
 
@@ -580,11 +571,6 @@
   width: 100%;
   max-width: 415px;
   border-radius: 10px;
-  background-color: #FBF8F0;
-  background-image: url('/patrika-bg.jpg');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
   box-shadow:
     0 22px 55px -10px rgba(45, 59, 49, 0.28),
     0 6px 20px -2px rgba(197, 160, 89, 0.3),
@@ -792,19 +778,17 @@
 .invitation-seamless-body {
   position: relative;
   width: 100%;
-  background-color: #FAF5EB;
-  background-image: var(--patrika-texture, url('/patrika-texture-new.jpg'));
+  background-color: #F5E9D3;
+  background-image: var(--invitation-bg, var(--patrika-texture, url('/invitation-bg.jpg')));
   background-repeat: repeat;
-  background-size: 340px 340px;
+  background-size: 500px auto;
 }
 
 .welcome-section,
 .scratch-section,
 .gallery-section,
 .countdown-section,
-.timeline-section,
 .venue-section,
-.dressCode-section,
 .prewedding-section,
 .closing-section,
 .footer-section {
@@ -852,7 +836,7 @@
   background-color: #FAF6EE;
   background-image: 
     linear-gradient(150deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.90) 55%, rgba(237, 228, 212, 0.92) 100%),
-    var(--patrika-texture, url('/patrika-texture-new.jpg'));
+    var(--invitation-bg, var(--patrika-texture, url('/invitation-bg.jpg')));
   background-size: cover;
   border: 1.5px solid rgba(197, 160, 89, 0.55);
   box-shadow:
@@ -890,54 +874,7 @@
   pointer-events: none;
 }
 
-/* Header & Footer on Physical Cardstock */
-.card-header-badge {
-  position: absolute;
-  top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  pointer-events: none;
-}
 
-.card-header-line {
-  width: 30px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.7));
-}
-
-.card-header-badge .card-header-line:last-child {
-  transform: scaleX(-1);
-}
-
-.card-header-text {
-  font-family: var(--font-body);
-  font-size: 0.68rem;
-  color: #A38042;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.card-footer-badge {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-  text-align: center;
-  pointer-events: none;
-}
-
-.scratch-day-highlight {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
-  color: var(--color-green);
-  letter-spacing: 0.22em;
-  font-weight: 600;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
 
 /* Hidden Date Content (100% Nested within Heart Belly) */
 .scratch-hidden-content {
@@ -1328,8 +1265,7 @@
   font-weight: 500;
 }
 
-/* ===== TIMELINE SECTION ===== */
-.timeline-section,
+/* ===== PRE-WEDDING SECTION ===== */
 .prewedding-section {
   padding: 3rem 2rem 1rem;
   display: flex;
@@ -1338,7 +1274,6 @@
   text-align: center;
 }
 
-.timeline-content,
 .prewedding-content {
   display: flex;
   flex-direction: column;
@@ -1505,52 +1440,6 @@
   transform: translateY(-2px);
 }
 
-/* ===== DRESS CODE ===== */
-.dressCode-section {
-  padding: 3rem 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.dressCode-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.dress-category {
-  margin-top: 1.5rem;
-}
-
-.dress-title {
-  font-family: var(--font-serif);
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-green);
-  margin-bottom: 0.3rem;
-}
-
-.dress-underline {
-  width: 50px;
-  height: 1.5px;
-  background: var(--color-green);
-  opacity: 0.3;
-  margin: 0 auto 0.6rem;
-}
-
-.dress-desc {
-  font-family: var(--font-serif);
-  font-size: 0.9rem;
-  color: var(--color-green);
-  opacity: 0.65;
-  font-style: italic;
-  max-width: 300px;
-}
-
-
-
 /* ===== CLOSING SECTION ===== */
 .closing-section {
   padding: 3rem 2rem 2rem;
@@ -1613,7 +1502,7 @@
 
 /* ===== FOOTER ===== */
 .footer-section {
-  padding: 2rem 2rem 5.5rem;
+  padding: 1rem 2rem 3rem;
   text-align: center;
   overflow: hidden;
 }
@@ -1762,12 +1651,7 @@
     font-size: 0.76rem;
   }
 
-  .floral-corner {
-    width: 110px;
-    height: 110px;
-  }
-
-  .invitation-vine-border {
+  .section-vine-border {
     width: 34px;
     background-size: 34px auto;
   }

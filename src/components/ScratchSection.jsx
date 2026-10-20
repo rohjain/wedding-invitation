@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Sparkles } from 'lucide-react';
 
+const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+
 const fadeInUp = (delay = 0) => ({
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -618,10 +620,14 @@ export default function ScratchSection({ isMuted = false }) {
     triggerCelebrationConfetti(160, 152);
   };
 
-  const googleCalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit+%26+Priya%27s+Wedding&dates=20261121T180000/20261121T233000&details=Wedding+ceremony+of+Rohit+and+Priya.+We+look+forward+to+celebrating+with+you!&location=Grand+Ballroom%2C+Jaipur%2C+Rajasthan';
+  const googleCalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rohit+%26+Priyanshi%27s+Wedding&dates=20261121T180000/20261121T233000&details=Wedding+ceremony+of+Rohit+and+Priyanshi.+We+look+forward+to+celebrating+with+you!&location=Bhagwati+Palace%2C+Ashta';
 
   return (
     <section className="scratch-section" id="scratch">
+      {/* Floral side borders covering 90% of section */}
+      <div className="section-vine-border vine-left" aria-hidden="true" />
+      <div className="section-vine-border vine-right" aria-hidden="true" />
+
       <motion.div
         className="scratch-content"
         variants={fadeInUp(0.2)}
@@ -661,7 +667,7 @@ export default function ScratchSection({ isMuted = false }) {
 
             {/* Secret Date Revealed Underneath Heart Foil */}
             <div className="scratch-hidden-content">
-              <p className="scratch-couple-names">Rohit &amp; Priya</p>
+              <p className="scratch-couple-names">Rohit &amp; Priyanshi</p>
               <div className="scratch-date-box">
                 <p className="scratch-date">November 21</p>
                 <p className="scratch-year">2026</p>
@@ -670,7 +676,7 @@ export default function ScratchSection({ isMuted = false }) {
 
             {/* Footer on physical cardstock */}
             <div className="card-footer-badge">
-              <p className="scratch-day-highlight">SATURDAY • JAIPUR</p>
+              <p className="scratch-day-highlight">SATURDAY • ASHTA</p>
             </div>
 
             {/* Foil shimmer reflection sweep when revealed */}
