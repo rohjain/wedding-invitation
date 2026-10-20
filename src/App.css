@@ -19,12 +19,15 @@ body.doors-locked {
   overscroll-behavior: none;
 }
 
+/* ===== GATEFOLD DOORS (3D REALISTIC OPENING) ===== */
 .gatefold-overlay {
   position: relative;
   width: 100%;
   max-width: 500px;
   height: 100vh;
   overflow: hidden;
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
 }
 
 .gatefold-doors {
@@ -32,31 +35,48 @@ body.doors-locked {
   width: 100%;
   height: 100%;
   display: flex;
+  transform-style: preserve-3d;
 }
 
+/* Door Leaf Container */
 .gate-door {
   width: 50%;
   height: 100%;
   position: relative;
-  overflow: hidden;
-  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
-  will-change: transform;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition:
+    transform 2.05s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s ease-out 1.45s;
 }
 
 .gate-door-left {
-  transform-origin: left center;
+  transform-origin: 0% 50%;
 }
 
 .gate-door-right {
-  transform-origin: right center;
+  transform-origin: 100% 50%;
 }
 
+/* 3D Realistic Inward Opening: Royal palace doors smoothly swinging inward to reveal the darbar */
 .is-open .gate-door-left {
-  transform: translateX(-100%);
+  transform: rotateY(87deg);
+  opacity: 0;
 }
 
 .is-open .gate-door-right {
-  transform: translateX(100%);
+  transform: rotateY(-87deg);
+  opacity: 0;
+}
+
+/* Door Leaf Content wrapper */
+.door-leaf-content {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform-style: preserve-3d;
 }
 
 /* ===== PHOTOREALISTIC ROYAL DARBAR DOORS ===== */
@@ -69,7 +89,7 @@ body.doors-locked {
   display: block;
   user-select: none;
   pointer-events: none;
-  filter: contrast(1.03) brightness(0.98);
+  filter: contrast(1.04) brightness(0.98);
 }
 
 .door-photo-left {
@@ -82,27 +102,139 @@ body.doors-locked {
   object-position: right center;
 }
 
-/* Authentic physical 3D depth and shadow when doors part */
-.gate-door::after {
-  content: '';
+/* Dynamic 3D lighting shadow overlay sweeping across door face */
+.door-surface-shadow {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  transition: opacity 0.8s ease;
   opacity: 0;
   z-index: 5;
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gate-door-left::after {
-  box-shadow: inset -18px 0 35px rgba(0, 0, 0, 0.75);
+.door-shadow-left {
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.38) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
-.gate-door-right::after {
-  box-shadow: inset 18px 0 35px rgba(0, 0, 0, 0.75);
+.door-shadow-right {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.38) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
-.is-open .gate-door::after {
+.is-open .door-surface-shadow {
+  opacity: 0.88;
+}
+
+/* 3D Meeting Edge Bevel (Solid teak/mahogany door thickness revealed on opening) */
+.door-edge-bevel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease 0.1s;
+  background: linear-gradient(
+    90deg,
+    #240d06 0%,
+    #4a2212 35%,
+    #6d371c 65%,
+    #2c1308 100%
+  );
+  box-shadow: inset 1px 0 2px rgba(245, 215, 127, 0.4),
+              inset -1px 0 3px rgba(0, 0, 0, 0.85);
+}
+
+.door-edge-left {
+  right: 0;
+}
+
+.door-edge-right {
+  left: 0;
+}
+
+.is-open .door-edge-bevel {
   opacity: 1;
+}
+
+/* Radiant Golden Light Spill bursting through parting gates */
+.door-light-spill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 140px;
+  transform: translateX(-50%) scaleX(0.05);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 248, 220, 0.95) 0%,
+    rgba(255, 220, 130, 0.6) 28%,
+    rgba(218, 165, 32, 0.22) 55%,
+    transparent 75%
+  );
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(10px);
+  mix-blend-mode: screen;
+}
+
+.is-open .door-light-spill {
+  animation: royalLightSpill 2.0s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes royalLightSpill {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.05);
+  }
+  18% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1.9);
+  }
+  55% {
+    opacity: 0.9;
+    transform: translateX(-50%) scaleX(3.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(4.5);
+  }
+}
+
+/* Center Seam Joint Shadow when closed */
+.door-center-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  z-index: 8;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.85) 75%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+  transition: opacity 0.35s ease;
+}
+
+.is-open .door-center-seam {
+  opacity: 0;
 }
 
 /* ===== ROYAL CRIMSON & GOLD ZARI DARBAR GATE ===== */
@@ -402,6 +534,13 @@ body.doors-locked {
   transform: translateY(-50%) scale(0.96);
 }
 
+.is-open .shubh-labh-medallion {
+  opacity: 0;
+  transform: translateY(-50%) scale(0.92);
+  transition: opacity 0.55s ease-out 0.12s, transform 0.55s ease-out 0.12s;
+  pointer-events: none;
+}
+
 .medallion-svg {
   width: 100%;
   height: 100%;
@@ -469,6 +608,11 @@ body.doors-locked {
   pointer-events: none;
   overflow: visible;
   transition: opacity 0.8s ease;
+}
+
+.is-open .auspicious-toran-container {
+  opacity: 0;
+  transition: opacity 0.65s ease-out 1.45s;
 }
 
 .toran-svg {
@@ -625,6 +769,13 @@ body.doors-locked {
   pointer-events: none;
   white-space: nowrap;
   animation: hintFloat 2.8s ease-in-out infinite;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.is-open .door-interaction-hint {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px) scale(0.95);
+  pointer-events: none;
 }
 
 .door-hint-text {

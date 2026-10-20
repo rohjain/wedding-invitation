@@ -93,8 +93,8 @@ function WavySeparator() {
 function GatefoldDoors({ onOpen, isOpen, isMuted: _isMuted }) {
   return (
     <div className={`gatefold-overlay ${isOpen ? 'is-open' : ''}`}>
-      {/* Auspicious Toran (Bandhanwar) at the top of the royal doorway */}
-      <AuspiciousToran />
+      {/* Radiant golden light shaft spilling from parting royal gates */}
+      <div className="door-light-spill" aria-hidden="true" />
 
       <div
         className="gatefold-doors"
@@ -103,29 +103,38 @@ function GatefoldDoors({ onOpen, isOpen, isMuted: _isMuted }) {
       >
         {/* Left Door */}
         <div className="gate-door gate-door-left">
-          <img
-            src={asset('/royal-darbar-doors.jpg')}
-            alt="Royal Palace Gate Left"
-            className="door-photo door-photo-left"
-          />
+          <div className="door-leaf-content">
+            <img
+              src={asset('/royal-door-only.jpg')}
+              alt="Royal Palace Gate Left"
+              className="door-photo door-photo-left"
+            />
+            {/* Dynamic 3D lighting shadow overlay */}
+            <div className="door-surface-shadow door-shadow-left" aria-hidden="true" />
+            {/* 3D meeting edge thickness bevel */}
+            <div className="door-edge-bevel door-edge-left" aria-hidden="true" />
+          </div>
           <ShubhLabhMedallion text="शुभ" side="left" isOpen={isOpen} onOpen={onOpen} />
         </div>
 
         {/* Right Door */}
         <div className="gate-door gate-door-right">
-          <img
-            src={asset('/royal-darbar-doors.jpg')}
-            alt="Royal Palace Gate Right"
-            className="door-photo door-photo-right"
-          />
+          <div className="door-leaf-content">
+            <img
+              src={asset('/royal-door-only.jpg')}
+              alt="Royal Palace Gate Right"
+              className="door-photo door-photo-right"
+            />
+            {/* Dynamic 3D lighting shadow overlay */}
+            <div className="door-surface-shadow door-shadow-right" aria-hidden="true" />
+            {/* 3D meeting edge thickness bevel */}
+            <div className="door-edge-bevel door-edge-right" aria-hidden="true" />
+          </div>
           <ShubhLabhMedallion text="लाभ" side="right" isOpen={isOpen} onOpen={onOpen} />
         </div>
 
-        {!isOpen && (
-          <div className="door-interaction-hint">
-            <span className="door-hint-text">✨ Tap शुभ-लाभ or knock to enter ✨</span>
-          </div>
-        )}
+        {/* Center seam shadow when closed */}
+        <div className="door-center-seam" aria-hidden="true" />
       </div>
     </div>
   );
@@ -784,6 +793,14 @@ function App() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
+  }, []);
+
+  // Auto-open support if query param present
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('open')) {
+      setTimeout(() => handleOpen(), 250);
+    }
   }, []);
 
   // Lock scroll while doors are present
