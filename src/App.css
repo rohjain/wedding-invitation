@@ -59,120 +59,601 @@ body.doors-locked {
   transform: translateX(100%);
 }
 
-.door-bg {
-  width: 100%;
+/* ===== PHOTOREALISTIC ROYAL DARBAR DOORS ===== */
+.door-photo {
+  position: absolute;
+  top: 0;
+  width: 200%;
   height: 100%;
   object-fit: cover;
   display: block;
+  user-select: none;
+  pointer-events: none;
+  filter: contrast(1.03) brightness(0.98);
 }
 
-.door-bg-flipped {
-  transform: scaleX(-1);
+.door-photo-left {
+  left: 0;
+  object-position: left center;
 }
 
-.door-gold-rod {
+.door-photo-right {
+  right: 0;
+  object-position: right center;
+}
+
+/* Authentic physical 3D depth and shadow when doors part */
+.gate-door::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  opacity: 0;
+  z-index: 5;
+}
+
+.gate-door-left::after {
+  box-shadow: inset -18px 0 35px rgba(0, 0, 0, 0.75);
+}
+
+.gate-door-right::after {
+  box-shadow: inset 18px 0 35px rgba(0, 0, 0, 0.75);
+}
+
+.is-open .gate-door::after {
+  opacity: 1;
+}
+
+/* ===== ROYAL CRIMSON & GOLD ZARI DARBAR GATE ===== */
+.royal-crimson-door-leaf {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+  background-color: #380508;
+}
+
+.darbar-crimson-base {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg,
+      #300407 0%,
+      #5A0F15 16%,
+      #8A141E 36%,
+      #A31A26 50%,
+      #7B0E17 68%,
+      #4D060C 88%,
+      #240204 100%);
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.88);
+}
+
+.darbar-crimson-sheen {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 45% 20%, rgba(255, 218, 140, 0.16) 0%, transparent 60%),
+    radial-gradient(circle at 55% 75%, rgba(255, 218, 140, 0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.darbar-zari-frame {
+  position: absolute;
+  inset: 6px;
+  border: 1.8px solid rgba(245, 215, 127, 0.7);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.65), 0 0 6px rgba(245, 215, 127, 0.25);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Top Header: Intricate Golden Geometric Jaali Transom */
+.darbar-jaali-transom {
+  position: absolute;
+  top: 7%;
+  left: 12px;
+  right: 12px;
+  height: 38px;
+  z-index: 2;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.75));
+}
+
+.leaf-left .darbar-jaali-transom {
+  left: 16px;
+  right: 10px;
+}
+
+.leaf-right .darbar-jaali-transom {
+  left: 10px;
+  right: 16px;
+}
+
+.jaali-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Upper Jharokha Arch: Royal Peacock */
+.darbar-jharokha-upper {
+  position: absolute;
+  top: 13.5%;
+  left: 10px;
+  right: 10px;
+  height: 27%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaf-left .darbar-jharokha-upper {
+  left: 14px;
+  right: 8px;
+}
+
+.leaf-right .darbar-jharokha-upper {
+  left: 8px;
+  right: 14px;
+}
+
+.peacock-jharokha-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 215px;
+  max-height: 225px;
+}
+
+/* Mid Section Framing */
+.darbar-mid-framing {
+  position: absolute;
+  top: 41%;
+  left: 0;
+  right: 0;
+  height: 18%;
+  pointer-events: none;
+}
+
+.knocker-gold-rosette {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 94px;
+  height: 94px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245, 215, 127, 0.45);
+  background: radial-gradient(circle, rgba(245, 215, 127, 0.12) 0%, transparent 70%);
+}
+
+/* Lower Jharokha Arch: Royal Caparisoned Elephant */
+.darbar-jharokha-lower {
+  position: absolute;
+  top: 61%;
+  left: 10px;
+  right: 10px;
+  height: 30%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaf-left .darbar-jharokha-lower {
+  left: 14px;
+  right: 8px;
+}
+
+.leaf-right .darbar-jharokha-lower {
+  left: 8px;
+  right: 14px;
+}
+
+.elephant-jharokha-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 220px;
+  max-height: 235px;
+}
+
+/* Bottom Decorative Border */
+.darbar-bottom-border {
+  position: absolute;
+  bottom: 8px;
+  left: 14px;
+  right: 14px;
+  height: 6px;
+  background: linear-gradient(90deg, #F5D77F, #B8861E, #F5D77F);
+  box-shadow: 0 0 8px rgba(245, 215, 127, 0.45);
+  border-radius: 2px;
+}
+
+/* Center Astragal Meeting Strip with Jewels */
+.darbar-center-astragal {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2.5px;
-  background: linear-gradient(
-    180deg,
-    #D2AE6D 0%,
-    #A38042 30%,
-    #E8CB8D 50%,
-    #A38042 70%,
-    #D2AE6D 100%
-  );
-  z-index: 4;
-  box-shadow: 0 0 6px rgba(197, 160, 89, 0.5);
+  width: 9px;
+  z-index: 5;
+  background: linear-gradient(180deg,
+      #FFE89E 0%,
+      #D4AF37 20%,
+      #8C6314 40%,
+      #FFE89E 60%,
+      #D4AF37 80%,
+      #8C6314 100%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.85), 0 0 5px rgba(245, 215, 127, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 
-.door-rod-right {
+.astragal-right {
   right: 0;
 }
 
-.door-rod-left {
+.astragal-left {
   left: 0;
 }
 
-.plaque-half {
+.astragal-jewel {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.jewel-1,
+.jewel-3 {
+  background: radial-gradient(circle at 35% 35%, #FF7373 0%, #D40D1E 60%, #5E0007 100%);
+}
+
+.jewel-2,
+.jewel-4 {
+  background: radial-gradient(circle at 35% 35%, #69FF9E 0%, #0A8C43 60%, #023617 100%);
+}
+
+/* Outer Frame Hinges */
+.darbar-hinges-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hinges-left {
+  left: 0;
+}
+
+.hinges-right {
+  right: 0;
+}
+
+.darbar-hinge {
+  position: absolute;
+  width: 14px;
+  height: 38px;
+  background: linear-gradient(180deg, #FFF2B2 0%, #D4AF37 35%, #8C6314 85%, #422C02 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.75);
+  border: 1px solid #704E0C;
+}
+
+.hinges-left .darbar-hinge {
+  left: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.hinges-right .darbar-hinge {
+  right: 0;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.hinge-1 {
+  top: 11%;
+}
+
+.hinge-2 {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hinge-3 {
+  bottom: 11%;
+}
+
+/* ===== AUSPICIOUS SHUBH — LABH MEDALLIONS ===== */
+.shubh-labh-medallion {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 110px;
-  height: 290px;
-  overflow: hidden;
-  z-index: 6;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.45));
-  pointer-events: none;
-}
-
-.plaque-half-left {
-  right: 0;
-}
-
-.plaque-half-left img {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 220px;
-  height: 290px;
-  max-width: none;
-  display: block;
-}
-
-.plaque-half-right {
-  left: 0;
-}
-
-.plaque-half-right img {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 220px;
-  height: 290px;
-  max-width: none;
-  display: block;
-}
-
-.plaque-tap-trigger {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 220px;
-  height: 290px;
+  width: clamp(68px, 16vw, 84px);
+  height: clamp(68px, 16vw, 84px);
   z-index: 10;
   cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.plaque-pulse {
+.medallion-left {
+  right: 5px;
+}
+
+.medallion-right {
+  left: 5px;
+}
+
+@media (hover: hover) {
+  .shubh-labh-medallion:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+}
+
+.shubh-labh-medallion:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.medallion-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.8));
+}
+
+/* Sacred Aura Pulse */
+.medallion-aura-pulse {
   position: absolute;
-  inset: -12px;
+  inset: -8px;
   border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(197, 160, 89, 0.25) 0%,
-    rgba(197, 160, 89, 0.08) 50%,
-    transparent 70%
-  );
-  animation: pulsePlaque 2.4s ease-in-out infinite;
+  background: radial-gradient(circle,
+      rgba(255, 230, 140, 0.4) 0%,
+      rgba(245, 215, 127, 0.15) 50%,
+      transparent 70%);
+  animation: shubhPulse 2.6s ease-in-out infinite;
   pointer-events: none;
 }
 
-@keyframes pulsePlaque {
-  0%, 100% {
+@keyframes shubhPulse {
+
+  0%,
+  100% {
     opacity: 0.35;
-    transform: scale(0.96);
+    transform: scale(0.95);
   }
+
   50% {
-    opacity: 0.9;
-    transform: scale(1.08);
+    opacity: 0.95;
+    transform: scale(1.1);
+  }
+}
+
+.is-tapped .medallion-aura-pulse {
+  animation: tapBurst 0.6s ease-out forwards;
+}
+
+@keyframes tapBurst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
   }
 }
 
 .is-open .gatefold-overlay {
   pointer-events: none;
+}
+
+/* ===== AUSPICIOUS TORAN (BANDHANWAR) ===== */
+.auspicious-toran-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: clamp(82px, 14vh, 105px);
+  z-index: 15;
+  pointer-events: none;
+  overflow: visible;
+  transition: opacity 0.8s ease;
+}
+
+.toran-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Organic bell swaying in the auspicious palace breeze */
+.toran-bell-group {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+.toran-bell-0 {
+  animation: bellSwayA 3.6s ease-in-out infinite alternate;
+}
+
+.toran-bell-1 {
+  animation: bellSwayB 4.2s ease-in-out infinite alternate 0.7s;
+}
+
+.toran-bell-2 {
+  animation: bellSwayA 3.8s ease-in-out infinite alternate 1.4s;
+}
+
+@keyframes bellSwayA {
+  0% {
+    transform: rotate(-3.5deg);
+  }
+
+  50% {
+    transform: rotate(1.2deg);
+  }
+
+  100% {
+    transform: rotate(3.5deg);
+  }
+}
+
+@keyframes bellSwayB {
+  0% {
+    transform: rotate(3deg);
+  }
+
+  50% {
+    transform: rotate(-1.5deg);
+  }
+
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* ===== ROYAL BRASS DOOR KNOCKERS (KUNDI) ===== */
+.brass-door-knocker {
+  position: absolute;
+  top: clamp(86px, 15vh, 150px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(66px, 15vw, 84px);
+  height: clamp(88px, 20vw, 114px);
+  z-index: 7;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (hover: hover) {
+  .brass-door-knocker:hover {
+    transform: translateX(-50%) scale(1.06);
+  }
+}
+
+.brass-door-knocker:active {
+  transform: translateX(-50%) scale(0.96);
+}
+
+.knocker-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.65));
+}
+
+/* Ring strike recoil physics animation */
+.knocker-ring-group {
+  transform-origin: 50px 44px;
+  transition: transform 0.15s ease-out;
+}
+
+.ring-striking {
+  animation: knockerRecoil 0.52s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes knockerRecoil {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-28deg);
+  }
+
+  40% {
+    transform: rotate(10deg);
+  }
+
+  58% {
+    transform: rotate(-12deg);
+  }
+
+  74% {
+    transform: rotate(5deg);
+  }
+
+  88% {
+    transform: rotate(-2deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Subtle golden touch ripple on knocker */
+.knocker-touch-ripple {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(235, 192, 95, 0.35) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.3s ease, transform 0.4s ease-out;
+}
+
+.is-striking .knocker-touch-ripple {
+  opacity: 1;
+  transform: scale(1.4);
+}
+
+/* ===== DOOR INTERACTION HINT ===== */
+.door-interaction-hint {
+  position: absolute;
+  top: calc(50% + 52px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: hintFloat 2.8s ease-in-out infinite;
+}
+
+.door-hint-text {
+  display: inline-block;
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #FFF4BD;
+  background: linear-gradient(180deg, rgba(68, 8, 14, 0.92) 0%, rgba(36, 3, 6, 0.96) 100%);
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(245, 215, 127, 0.6);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), 0 0 14px rgba(245, 215, 127, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+@keyframes hintFloat {
+
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
 /* ===== APP CONTAINER ===== */
@@ -294,11 +775,13 @@ body.doors-locked {
     transform: translate(-50%, -50%) scale(0.5);
     box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.6);
   }
+
   60% {
     opacity: 0.4;
     transform: translate(-50%, -50%) scale(2.8);
     box-shadow: 0 0 20px 12px rgba(197, 160, 89, 0.2);
   }
+
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(4.5);
@@ -330,13 +813,11 @@ body.doors-locked {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(237, 232, 220, 0.1) 0%,
-    rgba(237, 232, 220, 0.03) 30%,
-    rgba(237, 232, 220, 0.03) 60%,
-    rgba(237, 232, 220, 0.08) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(237, 232, 220, 0.1) 0%,
+      rgba(237, 232, 220, 0.03) 30%,
+      rgba(237, 232, 220, 0.03) 60%,
+      rgba(237, 232, 220, 0.08) 100%);
   z-index: 1;
 }
 
@@ -348,7 +829,7 @@ body.doors-locked {
   align-items: center;
   text-align: center;
   padding: 0 2rem;
-  margin-top: -3vh;
+  margin-top: -30vh;
 }
 
 .heart-icon {
@@ -436,10 +917,13 @@ body.doors-locked {
 }
 
 @keyframes bounceChevron {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.3;
   }
+
   50% {
     transform: translateY(4px);
     opacity: 0.8;
@@ -597,32 +1081,36 @@ body.doors-locked {
 .patrika-card-shimmer {
   position: absolute;
   inset: -100%;
-  background: linear-gradient(
-    115deg,
-    transparent 38%,
-    rgba(255, 245, 214, 0.18) 46%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 245, 214, 0.18) 54%,
-    transparent 62%
-  );
+  background: linear-gradient(115deg,
+      transparent 38%,
+      rgba(255, 245, 214, 0.18) 46%,
+      rgba(255, 255, 255, 0.35) 50%,
+      rgba(255, 245, 214, 0.18) 54%,
+      transparent 62%);
   transform: rotate(25deg);
   animation: patrikaShimmerSweep 7.5s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes patrikaShimmerSweep {
-  0%, 70% {
+
+  0%,
+  70% {
     transform: translateY(-130%) rotate(25deg);
     opacity: 0;
   }
+
   75% {
     opacity: 1;
   }
+
   85% {
     transform: translateY(130%) rotate(25deg);
     opacity: 1;
   }
-  90%, 100% {
+
+  90%,
+  100% {
     opacity: 0;
   }
 }
@@ -645,9 +1133,12 @@ body.doors-locked {
 }
 
 @keyframes kalashGentleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-3px);
   }
@@ -835,7 +1326,7 @@ body.doors-locked {
   inset: 0;
   border-radius: 24px;
   background-color: #FAF6EE;
-  background-image: 
+  background-image:
     linear-gradient(150deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.90) 55%, rgba(237, 228, 212, 0.92) 100%),
     url('./assets/invitation-bg.jpg');
   background-size: cover;
@@ -862,10 +1353,25 @@ body.doors-locked {
   opacity: 0.85;
 }
 
-.card-filigree.top-left { top: 12px; left: 12px; }
-.card-filigree.top-right { top: 12px; right: 12px; }
-.card-filigree.bottom-left { bottom: 12px; left: 12px; }
-.card-filigree.bottom-right { bottom: 12px; right: 12px; }
+.card-filigree.top-left {
+  top: 12px;
+  left: 12px;
+}
+
+.card-filigree.top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.card-filigree.bottom-left {
+  bottom: 12px;
+  left: 12px;
+}
+
+.card-filigree.bottom-right {
+  bottom: 12px;
+  right: 12px;
+}
 
 .card-inner-border {
   position: absolute;
@@ -935,14 +1441,12 @@ body.doors-locked {
   display: block;
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    115deg,
-    transparent 20%,
-    rgba(255, 240, 190, 0.45) 45%,
-    rgba(255, 255, 255, 0.7) 50%,
-    rgba(255, 240, 190, 0.45) 55%,
-    transparent 80%
-  );
+  background: linear-gradient(115deg,
+      transparent 20%,
+      rgba(255, 240, 190, 0.45) 45%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 240, 190, 0.45) 55%,
+      transparent 80%);
   background-size: 250% 100%;
   animation: shimmerSweep 1.6s ease forwards;
   pointer-events: none;
@@ -952,6 +1456,7 @@ body.doors-locked {
   0% {
     background-position: -150% 0;
   }
+
   100% {
     background-position: 150% 0;
   }
@@ -1108,6 +1613,7 @@ body.doors-locked {
     opacity: 0;
     transform: translateY(10px) scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1419,7 +1925,7 @@ body.doors-locked {
   font-family: var(--font-body);
   font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 5;
 }
 
@@ -1498,7 +2004,94 @@ body.doors-locked {
   font-size: 1.6rem;
   color: var(--color-green);
   opacity: 0.8;
-  margin-bottom: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ===== SHARE INVITATION SECTION ===== */
+.share-section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+  width: 100%;
+}
+
+.share-invite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 26px;
+  background: linear-gradient(135deg, #3B4A3F 0%, #2A362D 100%);
+  color: #FDFBF7;
+  border: 1px solid rgba(197, 160, 89, 0.55);
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(45, 59, 49, 0.22),
+    0 2px 8px rgba(197, 160, 89, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.share-invite-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(212, 175, 55, 0.22),
+      transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.share-invite-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 28px rgba(45, 59, 49, 0.3),
+    0 4px 12px rgba(197, 160, 89, 0.35);
+  border-color: rgba(212, 175, 55, 0.85);
+}
+
+.share-invite-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.share-invite-btn:active {
+  transform: translateY(0);
+}
+
+.share-invite-btn.is-copied {
+  background: linear-gradient(135deg, #2D5A38 0%, #1E4027 100%);
+  border-color: rgba(197, 160, 89, 0.7);
+  color: #FFF4C2;
+}
+
+.share-btn-icon {
+  color: #D4AF37;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.share-invite-btn:hover .share-btn-icon {
+  transform: scale(1.1);
+}
+
+.share-helper-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--color-green);
+  opacity: 0.72;
+  margin-top: 0.6rem;
+  letter-spacing: 0.02em;
 }
 
 /* ===== FOOTER ===== */
@@ -1541,6 +2134,9 @@ body.doors-locked {
 .floating-controls.top-right {
   top: 20px;
   right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .floating-controls.bottom-left {
@@ -1565,11 +2161,56 @@ body.doors-locked {
   justify-content: center;
   cursor: pointer;
   backdrop-filter: blur(4px);
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .control-btn:hover {
-  background: rgba(59, 74, 63, 0.9);
+  background: rgba(59, 74, 63, 0.95);
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.control-btn.is-copied {
+  background: #2D5A38;
+  border-color: rgba(212, 175, 55, 0.65);
+  color: #FFF4C2;
+}
+
+/* ===== SHARE TOAST NOTIFICATION ===== */
+.share-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
+  width: auto;
+  max-width: 90%;
+}
+
+.share-toast-content {
+  background: rgba(35, 46, 38, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  color: #FDFBF7;
+  padding: 10px 18px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.28),
+    0 4px 12px rgba(197, 160, 89, 0.18);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.toast-check-icon {
+  color: #E2BD63;
+  flex-shrink: 0;
 }
 
 .pill-btn {
@@ -1662,9 +2303,11 @@ body.doors-locked {
   .floating-controls.bottom-left {
     left: calc(50% - 250px + 20px);
   }
+
   .floating-controls.bottom-right {
     right: calc(50% - 250px + 20px);
   }
+
   .floating-controls.top-right {
     right: calc(50% - 250px + 20px);
   }

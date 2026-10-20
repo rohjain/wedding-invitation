@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Volume2, VolumeX, ChevronDown, MapPin, PartyPopper } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Volume2, VolumeX, ChevronDown, MapPin, PartyPopper, Share2, Check, Flower2 } from 'lucide-react';
 import WaxSealSection from './components/WaxSealSection';
+import PetalShower from './components/PetalShower';
+import AuspiciousToran from './components/AuspiciousToran';
+import ShubhLabhMedallion from './components/ShubhLabhMedallion';
 import invitationBg from './assets/invitation-bg.jpg';
 import './App.css';
 
@@ -87,9 +90,12 @@ function WavySeparator() {
 }
 
 /* ===== GATEFOLD DOORS ===== */
-function GatefoldDoors({ onOpen, isOpen }) {
+function GatefoldDoors({ onOpen, isOpen, isMuted: _isMuted }) {
   return (
     <div className={`gatefold-overlay ${isOpen ? 'is-open' : ''}`}>
+      {/* Auspicious Toran (Bandhanwar) at the top of the royal doorway */}
+      <AuspiciousToran />
+
       <div
         className="gatefold-doors"
         onClick={!isOpen ? onOpen : undefined}
@@ -97,37 +103,27 @@ function GatefoldDoors({ onOpen, isOpen }) {
       >
         {/* Left Door */}
         <div className="gate-door gate-door-left">
-          <img src={asset('/green-door.jpg')} alt="" className="door-bg" />
-          <div className="door-gold-rod door-rod-right" />
-          <div className="plaque-half plaque-half-left">
-            <img src={asset('/plaque-clean.png')} alt="Tap to" />
-          </div>
+          <img
+            src={asset('/royal-darbar-doors.jpg')}
+            alt="Royal Palace Gate Left"
+            className="door-photo door-photo-left"
+          />
+          <ShubhLabhMedallion text="शुभ" side="left" isOpen={isOpen} onOpen={onOpen} />
         </div>
 
         {/* Right Door */}
         <div className="gate-door gate-door-right">
-          <img src={asset('/green-door.jpg')} alt="" className="door-bg door-bg-flipped" />
-          <div className="door-gold-rod door-rod-left" />
-          <div className="plaque-half plaque-half-right">
-            <img src={asset('/plaque-clean.png')} alt="Open" />
-          </div>
+          <img
+            src={asset('/royal-darbar-doors.jpg')}
+            alt="Royal Palace Gate Right"
+            className="door-photo door-photo-right"
+          />
+          <ShubhLabhMedallion text="लाभ" side="right" isOpen={isOpen} onOpen={onOpen} />
         </div>
 
         {!isOpen && (
-          <div
-            className="plaque-tap-trigger"
-            onClick={onOpen}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onOpen();
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label="Tap to open invitation"
-          >
-            <div className="plaque-pulse" />
+          <div className="door-interaction-hint">
+            <span className="door-hint-text">✨ Tap शुभ-लाभ or knock to enter ✨</span>
           </div>
         )}
       </div>
@@ -136,9 +132,15 @@ function GatefoldDoors({ onOpen, isOpen }) {
 }
 
 /* ===== HERO SECTION ===== */
-function HeroSection({ isOpen, curtainsOpened }) {
+function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
   return (
-    <section className="hero-section" id="hero">
+    <section
+      className="hero-section"
+      id="hero"
+      onClick={onHeroTap}
+      style={{ cursor: isOpen ? 'pointer' : 'default' }}
+      title={isOpen ? "Tap anywhere to shower flower petals 🌸" : undefined}
+    >
       <div className="hero-bg-image" style={{ backgroundImage: `url(${asset('/wedding-bg.jpg')})` }} />
       <div className="hero-overlay" />
 
@@ -696,7 +698,7 @@ function PreWeddingSection() {
 
 
 /* ===== CLOSING / FOOTER ===== */
-function ClosingSection() {
+function ClosingSection({ onShare, copied }) {
   return (
     <section className="closing-section">
       <SectionVineBorders />
@@ -717,6 +719,26 @@ function ClosingSection() {
           />
         </div>
         <p className="closing-names">Rohit &amp; Priyanshi</p>
+
+        {/* Native Share Invitation Action */}
+        <div className="share-section-container">
+          <button
+            className={`share-invite-btn ${copied ? 'is-copied' : ''}`}
+            onClick={onShare}
+            aria-label="Share Wedding Invitation"
+          >
+            {copied ? (
+              <Check size={18} className="share-btn-icon" />
+            ) : (
+              <Share2 size={18} className="share-btn-icon" />
+            )}
+            <span>{copied ? 'Link Copied to Clipboard!' : 'Share Invitation'}</span>
+          </button>
+          <p className="share-helper-text">
+            Send this invitation to your loved ones &amp; family
+          </p>
+        </div>
+
         <WavySeparator />
       </motion.div>
     </section>
@@ -733,7 +755,18 @@ function App() {
   const [curtainsOpened, setCurtainsOpened] = useState(false);
   const [doorsGone, setDoorsGone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [showerCount, setShowerCount] = useState(0);
+  const [tapCoords, setTapCoords] = useState(null);
   const audioRef = useRef(null);
+  const toastTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
   // Ensure scroll is at the top on mount and prevent browser auto-restoring scroll
   useEffect(() => {
@@ -824,6 +857,61 @@ function App() {
     });
   };
 
+  const triggerToast = () => {
+    setCopied(true);
+    setShowToast(true);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
+      setShowToast(false);
+      setCopied(false);
+    }, 3200);
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Rohit & Priyanshi — Wedding Invitation',
+      text: "Rohit & Priyanshi are getting married! 💍✨\nYou are cordially invited to celebrate our wedding on November 21, 2026 at Bhagwati Palace, Ashta.",
+      url: window.location.href,
+    };
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    // Fallback: copy link & details to clipboard
+    try {
+      const textToCopy = `${shareData.text}\n${shareData.url}`;
+      await navigator.clipboard.writeText(textToCopy);
+      triggerToast();
+    } catch {
+      // If clipboard write is denied or unsupported, open direct WhatsApp share
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+        `${shareData.text}\n${shareData.url}`
+      )}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleHeroTap = (e) => {
+    if (!isOpen) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.clientX ?? (rect.left + rect.width / 2);
+    const clientY = e.clientY ?? (rect.top + rect.height * 0.4);
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    setTapCoords({ x, y, id: Date.now() });
+  };
+
+  const triggerPetalShower = (e) => {
+    e.stopPropagation();
+    setShowerCount((prev) => prev + 1);
+  };
+
   return (
     <div className="app-container">
       <audio ref={audioRef} loop>
@@ -832,14 +920,25 @@ function App() {
 
       {!doorsGone && (
         <div className={`gatefold-container ${isOpen ? 'is-open' : ''}`}>
-          <GatefoldDoors onOpen={handleOpen} isOpen={isOpen} />
+          <GatefoldDoors onOpen={handleOpen} isOpen={isOpen} isMuted={isMuted} />
         </div>
       )}
+
+      {/* Falling Flower Petals & Gold Confetti Shower */}
+      <PetalShower
+        active={isOpen}
+        triggerKey={showerCount}
+        tapCoords={tapCoords}
+      />
 
       <div
         className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
       >
-        <HeroSection isOpen={isOpen} curtainsOpened={curtainsOpened} />
+        <HeroSection
+          isOpen={isOpen}
+          curtainsOpened={curtainsOpened}
+          onHeroTap={handleHeroTap}
+        />
         <div
           className="invitation-seamless-body"
           style={{ backgroundImage: `url("${invitationBg}")` }}
@@ -850,19 +949,58 @@ function App() {
           <CountdownSection />
           <VenueSection />
           <PreWeddingSection />
-          <ClosingSection />
+          <ClosingSection onShare={handleShare} copied={copied} />
           <Footer />
         </div>
       </div>
 
       {/* Floating Controls */}
       <div className="floating-controls top-right">
-        <button className="control-btn" onClick={toggleMute} aria-label="Toggle music">
+        {isOpen && (
+          <button
+            className="control-btn btn-flower-shower"
+            onClick={triggerPetalShower}
+            aria-label="Shower flower petals"
+            title="Shower Petals 🌸"
+          >
+            <Flower2 size={18} />
+          </button>
+        )}
+        <button
+          className={`control-btn ${copied ? 'is-copied' : ''}`}
+          onClick={handleShare}
+          aria-label="Share wedding invitation"
+          title={copied ? "Link Copied!" : "Share Invitation"}
+        >
+          {copied ? <Check size={18} /> : <Share2 size={18} />}
+        </button>
+        <button
+          className="control-btn"
+          onClick={toggleMute}
+          aria-label="Toggle music"
+          title={isMuted ? "Play Music" : "Mute Music"}
+        >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
       </div>
 
-
+      {/* Share Toast Notification */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            className="share-toast"
+            initial={{ opacity: 0, y: 30, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
+            <div className="share-toast-content">
+              <Check size={17} className="toast-check-icon" />
+              <span>Invitation link copied! Share with loved ones ✨</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
