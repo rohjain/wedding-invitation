@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, ChevronDown, MapPin, PartyPopper, Share2, Check, Flower2 } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
+import { Volume2, VolumeX, ChevronDown, ChevronLeft, ChevronRight, MapPin, PartyPopper, Share2, Check, Flower2 } from 'lucide-react';
 import WaxSealSection from './components/WaxSealSection';
 import PetalShower from './components/PetalShower';
 import AuspiciousToran from './components/AuspiciousToran';
@@ -96,6 +96,9 @@ function GatefoldDoors({ onOpen, isOpen, isMuted: _isMuted }) {
       {/* Radiant golden light shaft spilling from parting royal gates */}
       <div className="door-light-spill" aria-hidden="true" />
 
+      {/* Auspicious Entrance Toran (Bandhanwar) with swaying brass bells */}
+      <AuspiciousToran />
+
       <div
         className="gatefold-doors"
         onClick={!isOpen ? onOpen : undefined}
@@ -136,12 +139,31 @@ function GatefoldDoors({ onOpen, isOpen, isMuted: _isMuted }) {
         {/* Center seam shadow when closed */}
         <div className="door-center-seam" aria-hidden="true" />
       </div>
+
+      {/* Animated Tap to Open Invitation Call-to-Action Hint */}
+      {!isOpen && (
+        <div
+          className="door-interaction-hint"
+          onClick={onOpen}
+          role="button"
+          tabIndex={0}
+          aria-label="Tap to open invitation"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onOpen();
+            }
+          }}
+        >
+          <span className="door-hint-text">✨ TAP TO OPEN INVITATION ✨</span>
+        </div>
+      )}
     </div>
   );
 }
 
 /* ===== HERO SECTION ===== */
-function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
+function HeroSection({ isOpen, curtainsUnfolding, curtainsOpened, onHeroTap }) {
   return (
     <section
       className="hero-section"
@@ -153,9 +175,9 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
       <div className="hero-bg-image" style={{ backgroundImage: `url(${asset('/wedding-bg.jpg')})` }} />
       <div className="hero-overlay" />
 
-      {/* Curtain Unfold */}
+      {/* Curtain Unfold — only activates AFTER the gate animation is done */}
       <div
-        className={`curtains-unfold-overlay ${isOpen ? 'unfold-active' : ''} ${
+        className={`curtains-unfold-overlay ${curtainsUnfolding ? 'unfold-active' : ''} ${
           curtainsOpened ? 'unfold-complete' : ''
         }`}
       >
@@ -167,12 +189,12 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
         </div>
       </div>
 
-      {isOpen && <div className="center-tap-ripple" />}
+      {curtainsUnfolding && <div className="center-tap-ripple" />}
 
       <div className="hero-content">
         <motion.div
           className="heart-icon"
-          variants={scaleIn(2.8)}
+          variants={scaleIn(2.2)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -181,7 +203,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.p
           className="hero-subtitle"
-          variants={fadeInUp(3.2)}
+          variants={fadeInUp(2.4)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -190,7 +212,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.div
           className="hero-divider"
-          variants={fadeIn(3.6)}
+          variants={fadeIn(2.6)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -199,7 +221,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.div
           className="person-block"
-          variants={fadeInUp(4.1)}
+          variants={fadeInUp(2.8)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -209,7 +231,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.div
           className="ampersand-block"
-          variants={scaleIn(5.1)}
+          variants={scaleIn(3.1)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -218,7 +240,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.div
           className="person-block"
-          variants={fadeInUp(5.6)}
+          variants={fadeInUp(3.3)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -228,7 +250,7 @@ function HeroSection({ isOpen, curtainsOpened, onHeroTap }) {
 
         <motion.div
           className="scroll-cue"
-          variants={fadeIn(6.6)}
+          variants={fadeIn(3.7)}
           initial="hidden"
           animate={isOpen ? 'visible' : 'hidden'}
         >
@@ -408,7 +430,13 @@ function WelcomeSection() {
           <div className="patrika-card-shimmer" aria-hidden="true" />
 
           {/* Top Auspicious Invocation Header */}
-          <div className="patrika-header">
+          <motion.div
+            className="patrika-header"
+            variants={fadeInUp(0.15)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <MangalKalash size={38} className="patrika-kalash-icon" />
             <p className="patrika-shloka-text">॥ श्री गणेशाय नमः ॥</p>
             <div className="patrika-vivah-badge">
@@ -416,12 +444,18 @@ function WelcomeSection() {
               <span className="patrika-badge-text">शुभ विवाह</span>
               <span className="patrika-badge-dot">•</span>
             </div>
-          </div>
+          </motion.div>
 
           <PatrikaDivider />
 
           {/* Invitation Content */}
-          <div className="patrika-content">
+          <motion.div
+            className="patrika-content"
+            variants={fadeInUp(0.3)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <h3 className="patrika-title">WEDDING INVITATION</h3>
             <p className="welcome-text-intro">
               We are honored to welcome you to the<br />Wedding ceremony of
@@ -432,14 +466,20 @@ function WelcomeSection() {
               we thank you from the bottom of our hearts for being part of this blessed occasion{' '}
               <HeartIcon size={14} className="inline-heart" />
             </p>
-          </div>
+          </motion.div>
 
           <PatrikaDivider />
 
           {/* Traditional Auspicious Blessing Sign-off */}
-          <div className="patrika-footer">
+          <motion.div
+            className="patrika-footer"
+            variants={fadeInUp(0.4)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <p className="patrika-blessing-header">॥ स्नेह निमंत्रण ॥</p>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </section>
@@ -460,22 +500,44 @@ function SectionVineBorders() {
 /* ===== PHOTO GALLERY ===== */
 function GallerySection() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const photos = ['/gallery-1.jpg', '/gallery-2.jpg', '/gallery-3.jpg'].map(asset);
-  const touchStart = useRef(0);
+  const touchStartX = useRef(0);
 
   const handleTouchStart = (e) => {
-    touchStart.current = e.touches[0].clientX;
+    touchStartX.current = e.touches[0].clientX;
+    setIsDragging(true);
   };
 
-  const handleTouchEnd = (e) => {
-    const diff = touchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0 && activeSlide < photos.length - 1) {
-        setActiveSlide(prev => prev + 1);
-      } else if (diff < 0 && activeSlide > 0) {
-        setActiveSlide(prev => prev - 1);
-      }
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const currentX = e.touches[0].clientX;
+    const diff = currentX - touchStartX.current;
+    // Dampen drag resistance at carousel edges
+    if ((activeSlide === 0 && diff > 0) || (activeSlide === photos.length - 1 && diff < 0)) {
+      setDragOffset(diff * 0.35);
+    } else {
+      setDragOffset(diff);
     }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    if (dragOffset < -45 && activeSlide < photos.length - 1) {
+      setActiveSlide((prev) => prev + 1);
+    } else if (dragOffset > 45 && activeSlide > 0) {
+      setActiveSlide((prev) => prev - 1);
+    }
+    setDragOffset(0);
+  };
+
+  const prevSlide = () => {
+    if (activeSlide > 0) setActiveSlide((prev) => prev - 1);
+  };
+
+  const nextSlide = () => {
+    if (activeSlide < photos.length - 1) setActiveSlide((prev) => prev + 1);
   };
 
   return (
@@ -494,18 +556,45 @@ function GallerySection() {
         <div
           className="gallery-slider"
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           <div
             className="gallery-track"
-            style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+            style={{
+              transform: `translateX(calc(-${activeSlide * 100}% + ${dragOffset}px))`,
+              transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.25, 1, 0.35, 1)',
+            }}
           >
             {photos.map((src, i) => (
-              <div key={i} className="gallery-slide">
-                <img src={src} alt={`Wedding photo ${i + 1}`} />
+              <div
+                key={i}
+                className={`gallery-slide ${i === activeSlide ? 'is-active' : ''}`}
+              >
+                <img src={src} alt={`Wedding photo ${i + 1}`} loading="lazy" />
               </div>
             ))}
           </div>
+
+          {/* Desktop Arrow Controls */}
+          {activeSlide > 0 && (
+            <button
+              className="gallery-arrow gallery-arrow-prev"
+              onClick={prevSlide}
+              aria-label="Previous photo"
+            >
+              <ChevronLeft size={20} />
+            </button>
+          )}
+          {activeSlide < photos.length - 1 && (
+            <button
+              className="gallery-arrow gallery-arrow-next"
+              onClick={nextSlide}
+              aria-label="Next photo"
+            >
+              <ChevronRight size={20} />
+            </button>
+          )}
         </div>
 
         <div className="gallery-dots">
@@ -514,6 +603,7 @@ function GallerySection() {
               key={i}
               className={`gallery-dot ${i === activeSlide ? 'active' : ''}`}
               onClick={() => setActiveSlide(i)}
+              aria-label={`Go to slide ${i + 1}`}
             />
           ))}
         </div>
@@ -570,13 +660,26 @@ function CountdownSection() {
           {blocks.map((block, i) => (
             <motion.div
               key={i}
-              className="countdown-item"
+              className={`countdown-item ${block.label === 'SECONDS' ? 'countdown-seconds' : ''}`}
               variants={scaleIn(0.1 * i)}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="countdown-number">{String(block.value).padStart(2, '0')}</div>
+              <div className="countdown-number-wrapper">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    key={block.value}
+                    className="countdown-number"
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 10, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                  >
+                    {String(block.value).padStart(2, '0')}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
               <div className="countdown-label">{block.label}</div>
             </motion.div>
           ))}
@@ -601,7 +704,10 @@ function VenueSection() {
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
       >
-        <MapPin size={24} className="section-icon" />
+        <div className="venue-pin-wrapper">
+          <div className="venue-pin-beacon" aria-hidden="true" />
+          <MapPin size={26} className="section-icon venue-map-pin" />
+        </div>
         <h2 className="section-title-script">Venue</h2>
         <SectionDivider />
 
@@ -649,18 +755,18 @@ function PreWeddingSection() {
   const events = [
     {
       date: 'THURSDAY, NOV 19, 2026',
-      items: [{ time: '8:30 PM', title: 'Mahendi', desc: "At Bride's House" }],
+      items: [{ time: '8:30 PM', title: 'Mahendi', desc: "At Groom's & Bride's House" }],
     },
     {
       date: 'FRIDAY, NOV 20, 2026',
       items: [
-        { time: '2:00 PM', title: 'Haldi', desc: "At Groom's House" },
+        { time: '2:00 PM', title: 'Haldi', desc: "At Venue" },
         { time: '8:00 PM', title: 'Sangeet', desc: "Music, Dance & Dinner" },
       ],
     },
     {
       date: 'SATURDAY, NOV 21, 2026',
-      items: [{ time: '7:30 PM', title: 'Reception' }],
+      items: [{ time: '11:00 AM', title: 'Reception' }],
     },
   ];
 
@@ -687,14 +793,21 @@ function PreWeddingSection() {
               <span className="timeline-date-line" />
             </div>
             {group.items.map((item, ii) => (
-              <div key={ii} className="timeline-item">
+              <motion.div
+                key={ii}
+                className="timeline-item"
+                variants={fadeInUp(0.12 * (gi * 2 + ii))}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-20px' }}
+              >
                 <span className="timeline-time">{item.time}</span>
                 <span className="timeline-bar" />
                 <div className="timeline-info">
                   <h4 className="timeline-title">{item.title}</h4>
                   {item.desc && <p className="timeline-desc">{item.desc}</p>}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         ))}
@@ -708,6 +821,15 @@ function PreWeddingSection() {
 
 /* ===== CLOSING / FOOTER ===== */
 function ClosingSection({ onShare, copied }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      setImageLoaded(true);
+    }
+  }, []);
+
   return (
     <section className="closing-section">
       <SectionVineBorders />
@@ -721,11 +843,18 @@ function ClosingSection({ onShare, copied }) {
       >
         <h2 className="closing-text">We can't wait to celebrate with you!</h2>
         <div className="closing-image-wrapper">
-          <img
-            src={asset('/celebrate-couple.jpg')}
-            alt="Rohit & Priyanshi"
-            className="closing-image"
-          />
+          <picture>
+            <source srcSet={asset('/celebrate-couple.webp')} type="image/webp" />
+            <img
+              ref={imgRef}
+              src={asset('/celebrate-couple.png')}
+              alt="Rohit & Priyanshi"
+              className={`closing-image ${imageLoaded ? 'is-loaded' : 'is-loading'}`}
+              loading="eager"
+              decoding="async"
+              onLoad={() => setImageLoaded(true)}
+            />
+          </picture>
         </div>
         <p className="closing-names">Rohit &amp; Priyanshi</p>
 
@@ -761,6 +890,7 @@ function Footer() {
 /* ===== MAIN APP ===== */
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [curtainsUnfolding, setCurtainsUnfolding] = useState(false);
   const [curtainsOpened, setCurtainsOpened] = useState(false);
   const [doorsGone, setDoorsGone] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -795,34 +925,7 @@ function App() {
     };
   }, []);
 
-  // Auto-open support if query param present
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('open')) {
-      setTimeout(() => handleOpen(), 250);
-    }
-  }, []);
-
-  // Lock scroll while doors are present
-  useEffect(() => {
-    if (!doorsGone) {
-      document.documentElement.classList.add('doors-locked');
-      document.body.classList.add('doors-locked');
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    } else {
-      document.documentElement.classList.remove('doors-locked');
-      document.body.classList.remove('doors-locked');
-    }
-
-    return () => {
-      document.documentElement.classList.remove('doors-locked');
-      document.body.classList.remove('doors-locked');
-    };
-  }, [doorsGone]);
-
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     if (isOpen) return;
 
     // Reset scroll to the absolute top of the page immediately
@@ -856,12 +959,45 @@ function App() {
       setIsMuted(false);
     }
 
-    setTimeout(() => setCurtainsOpened(true), 2500);
+    // Once gate animation is done (1.8s), THEN ONLY the curtain animation starts
     setTimeout(() => {
       setDoorsGone(true);
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }, 2200);
-  };
+      setCurtainsUnfolding(true);
+    }, 1800);
+
+    // Curtain unfold completes at 3.4s
+    setTimeout(() => {
+      setCurtainsOpened(true);
+    }, 3400);
+  }, [isOpen]);
+
+  // Auto-open support if query param present
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('open')) {
+      const timer = setTimeout(() => handleOpen(), 250);
+      return () => clearTimeout(timer);
+    }
+  }, [handleOpen]);
+
+  // Lock scroll while doors are present
+  useEffect(() => {
+    if (!doorsGone) {
+      document.documentElement.classList.add('doors-locked');
+      document.body.classList.add('doors-locked');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } else {
+      document.documentElement.classList.remove('doors-locked');
+      document.body.classList.remove('doors-locked');
+    }
+
+    return () => {
+      document.documentElement.classList.remove('doors-locked');
+      document.body.classList.remove('doors-locked');
+    };
+  }, [doorsGone]);
 
   const toggleMute = () => {
     setIsMuted((prev) => {
@@ -930,95 +1066,98 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <audio ref={audioRef} loop>
-        <source src={asset('/wedding-music.wav')} type="audio/wav" />
-      </audio>
+    <MotionConfig reducedMotion="never">
+      <div className="app-container">
+        <audio ref={audioRef} loop>
+          <source src={asset('/wedding-music.wav')} type="audio/wav" />
+        </audio>
 
-      {!doorsGone && (
-        <div className={`gatefold-container ${isOpen ? 'is-open' : ''}`}>
-          <GatefoldDoors onOpen={handleOpen} isOpen={isOpen} isMuted={isMuted} />
-        </div>
-      )}
+        {!doorsGone && (
+          <div className={`gatefold-container ${isOpen ? 'is-open' : ''}`}>
+            <GatefoldDoors onOpen={handleOpen} isOpen={isOpen} isMuted={isMuted} />
+          </div>
+        )}
 
-      {/* Falling Flower Petals & Gold Confetti Shower */}
-      <PetalShower
-        active={isOpen}
-        triggerKey={showerCount}
-        tapCoords={tapCoords}
-      />
-
-      <div
-        className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
-      >
-        <HeroSection
-          isOpen={isOpen}
-          curtainsOpened={curtainsOpened}
-          onHeroTap={handleHeroTap}
+        {/* Falling Flower Petals & Gold Confetti Shower */}
+        <PetalShower
+          active={isOpen}
+          triggerKey={showerCount}
+          tapCoords={tapCoords}
         />
+
         <div
-          className="invitation-seamless-body"
-          style={{ backgroundImage: `url("${invitationBg}")` }}
+          className={`invitation-wrapper ${isOpen ? 'invitation-revealed' : 'invitation-hidden'}`}
         >
-          <WelcomeSection />
-          <WaxSealSection isMuted={isMuted} />
-          <GallerySection />
-          <CountdownSection />
-          <VenueSection />
-          <PreWeddingSection />
-          <ClosingSection onShare={handleShare} copied={copied} />
-          <Footer />
+          <HeroSection
+            isOpen={isOpen}
+            curtainsUnfolding={curtainsUnfolding}
+            curtainsOpened={curtainsOpened}
+            onHeroTap={handleHeroTap}
+          />
+          <div
+            className="invitation-seamless-body"
+            style={{ backgroundImage: `url("${invitationBg}")` }}
+          >
+            <WelcomeSection />
+            <WaxSealSection isMuted={isMuted} />
+            <GallerySection />
+            <CountdownSection />
+            <VenueSection />
+            <PreWeddingSection />
+            <ClosingSection onShare={handleShare} copied={copied} />
+            <Footer />
+          </div>
         </div>
-      </div>
 
-      {/* Floating Controls */}
-      <div className="floating-controls top-right">
-        {isOpen && (
+        {/* Floating Controls */}
+        <div className="floating-controls top-right">
+          {isOpen && (
+            <button
+              className="control-btn btn-flower-shower"
+              onClick={triggerPetalShower}
+              aria-label="Shower flower petals"
+              title="Shower Petals 🌸"
+            >
+              <Flower2 size={18} />
+            </button>
+          )}
           <button
-            className="control-btn btn-flower-shower"
-            onClick={triggerPetalShower}
-            aria-label="Shower flower petals"
-            title="Shower Petals 🌸"
+            className={`control-btn ${copied ? 'is-copied' : ''}`}
+            onClick={handleShare}
+            aria-label="Share wedding invitation"
+            title={copied ? "Link Copied!" : "Share Invitation"}
           >
-            <Flower2 size={18} />
+            {copied ? <Check size={18} /> : <Share2 size={18} />}
           </button>
-        )}
-        <button
-          className={`control-btn ${copied ? 'is-copied' : ''}`}
-          onClick={handleShare}
-          aria-label="Share wedding invitation"
-          title={copied ? "Link Copied!" : "Share Invitation"}
-        >
-          {copied ? <Check size={18} /> : <Share2 size={18} />}
-        </button>
-        <button
-          className="control-btn"
-          onClick={toggleMute}
-          aria-label="Toggle music"
-          title={isMuted ? "Play Music" : "Mute Music"}
-        >
-          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
-      </div>
-
-      {/* Share Toast Notification */}
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            className="share-toast"
-            initial={{ opacity: 0, y: 30, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+          <button
+            className="control-btn"
+            onClick={toggleMute}
+            aria-label="Toggle music"
+            title={isMuted ? "Play Music" : "Mute Music"}
           >
-            <div className="share-toast-content">
-              <Check size={17} className="toast-check-icon" />
-              <span>Invitation link copied! Share with loved ones ✨</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+        </div>
+
+        {/* Share Toast Notification */}
+        <AnimatePresence>
+          {showToast && (
+            <motion.div
+              className="share-toast"
+              initial={{ opacity: 0, y: 30, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+            >
+              <div className="share-toast-content">
+                <Check size={17} className="toast-check-icon" />
+                <span>Invitation link copied! Share with loved ones ✨</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </MotionConfig>
   );
 }
 
