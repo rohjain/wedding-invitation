@@ -5,6 +5,7 @@ import WaxSealSection from './components/WaxSealSection';
 import PetalShower from './components/PetalShower';
 import AuspiciousToran from './components/AuspiciousToran';
 import ShubhLabhMedallion from './components/ShubhLabhMedallion';
+import RoyalPreloader from './components/RoyalPreloader';
 import invitationBg from './assets/invitation-bg.jpg';
 import './App.css';
 
@@ -438,7 +439,7 @@ function WelcomeSection() {
             viewport={{ once: true }}
           >
             <MangalKalash size={38} className="patrika-kalash-icon" />
-            <p className="patrika-shloka-text">॥ श्री गणेशाय नमः ॥</p>
+            <p className="patrika-shloka-text">॥ श्री महावीराय नमः ॥</p>
             <div className="patrika-vivah-badge">
               <span className="patrika-badge-dot">•</span>
               <span className="patrika-badge-text">शुभ विवाह</span>
@@ -889,6 +890,7 @@ function Footer() {
 
 /* ===== MAIN APP ===== */
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [curtainsUnfolding, setCurtainsUnfolding] = useState(false);
   const [curtainsOpened, setCurtainsOpened] = useState(false);
@@ -971,14 +973,15 @@ function App() {
     }, 3400);
   }, [isOpen]);
 
-  // Auto-open support if query param present
+  // Auto-open support if query param present (waits until preloader finishes)
   useEffect(() => {
+    if (isLoading) return;
     const params = new URLSearchParams(window.location.search);
     if (params.get('open')) {
-      const timer = setTimeout(() => handleOpen(), 250);
+      const timer = setTimeout(() => handleOpen(), 300);
       return () => clearTimeout(timer);
     }
-  }, [handleOpen]);
+  }, [isLoading, handleOpen]);
 
   // Lock scroll while doors are present
   useEffect(() => {
@@ -1068,7 +1071,12 @@ function App() {
   return (
     <MotionConfig reducedMotion="never">
       <div className="app-container">
-        <audio ref={audioRef} loop>
+        {/* Royal Indian Wedding Preloader */}
+        {isLoading && (
+          <RoyalPreloader onComplete={() => setIsLoading(false)} />
+        )}
+
+        <audio ref={audioRef} loop preload="auto">
           <source src={asset('/wedding-music.wav')} type="audio/wav" />
         </audio>
 
